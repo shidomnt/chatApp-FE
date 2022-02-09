@@ -15,6 +15,32 @@ function UserProvider({ children }) {
     }
   }, [user])
 
+  useEffect(() => {
+    var intervalId;
+    if (user) {
+      intervalId = setInterval(() => {
+        axios.post(`${apiUrl}/users/refresh`, {
+          token: user.refreshToken
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+        })
+          .then(response => {
+            if (response.data.success) {
+              localStorage.setItem("token", response.data.accessToken);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }, 30000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    }
+  }, [user]);
+
   const getUser = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -33,7 +59,11 @@ function UserProvider({ children }) {
       console.log(error);
     }
   };
-  useEffect(() => getUser(), []);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      getUser();
+    }
+  }, []);
 
   const login = async (data) => {
     try {
