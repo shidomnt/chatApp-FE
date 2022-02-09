@@ -1,11 +1,19 @@
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 import { apiUrl } from "./constants";
 
 const UserContext = createContext();
 
 function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user])
 
   const getUser = async () => {
     try {
@@ -33,6 +41,7 @@ function UserProvider({ children }) {
       console.log(response.data);
       if (response.data.success) {
         localStorage.setItem("token", response.data.accessToken);
+        await getUser();
       }
     } catch (error) {
       console.log(error);
