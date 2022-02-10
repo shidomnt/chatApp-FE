@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Space, Input } from 'antd';
 
 import RoomList from './RoomList';
 import UserInfo from './UserInfo';
 import { SearchOutlined } from '@ant-design/icons';
+import { AppContext } from '../../../contexts';
 
 const StyledWrapper = styled.div`
   &&& {
@@ -33,23 +34,10 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const rooms = [
-  {
-    id: 1,
-    name: 'Room1',
-  },
-  {
-    id: 2,
-    name: 'Room2',
-  },
-  {
-    id: 3,
-    name: 'Room3',
-  },
-];
-
 function SideBar() {
   const [filterInput, setFilterInput] = useState('');
+  const { state } = useContext(AppContext);
+  const { rooms } = state;
 
   return (
     <StyledWrapper>

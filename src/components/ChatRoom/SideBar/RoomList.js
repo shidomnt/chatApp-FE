@@ -14,8 +14,8 @@ function RoomList({ rooms, className }) {
           itemKey="id"
         >
           {item => (
-            <NavLink className="link" to={`/rooms/${item.id}`} >
-              <List.Item style={{ paddingLeft: 4, paddingRight: 4 }} key={item.id}>
+            <NavLink className="link" to={`/rooms/${item._id}`} >
+              <List.Item style={{ paddingLeft: 4, paddingRight: 4 }} key={item._id}>
                 <List.Item.Meta
                   style={{
                     alignItems: 'center',

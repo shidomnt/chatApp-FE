@@ -9,7 +9,7 @@ import Register from "./components/Auth/Register";
 import { UserProvider } from "./contexts";
 import ChatRoom from "./components/ChatRoom";
 import ChatWindow from "./components/ChatRoom/ChatWindow";
-import AppProvider from "./contexts/AppProvider";
+import { AppProvider } from "./contexts";
 
 function App() {
   return (
