@@ -57,7 +57,7 @@ function UserProvider({ children }) {
           .catch((err) => {
             console.log(err);
           });
-      }, 30000);
+      }, 5000);
     }
     return () => {
       clearInterval(intervalId);

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Message from './Message';
+import Header from './Header'
 
 const StyledWrapper = styled.div`
   &&& {
@@ -50,12 +51,14 @@ function ChatWindow() {
     setMessages(messagesList);
   }, [roomId]);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+  };
 
   return (
     <StyledWrapper>
+      <Header />
       <Message className="messages-list" messages={messages} />
-      <Input.TextArea
+      <Input
         onPressEnter={handleSubmit}
         onChange={(e) => setInputMessage(e.target.value)}
         value={inputMessage}
