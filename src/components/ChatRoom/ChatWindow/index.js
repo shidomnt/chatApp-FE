@@ -23,7 +23,9 @@ function ChatWindow() {
   const { roomId } = useParams();
   const [listMessage, setListMessage] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const { getMessage, createMessage } = useContext(AppContext);
+  const appState = useContext(AppContext);
+
+  const { getMessage, createMessage } = appState;
 
   useEffect(() => {
     getMessage(roomId, (messages) => {
@@ -33,10 +35,10 @@ function ChatWindow() {
 
   const handleSubmit = () => {
     if(inputMessage) {
-      createMessage({roomId, content: inputMessage})
-        .then(() => {
-          setInputMessage('')
-        })
+      createMessage({roomId, content: inputMessage}, (newMessage) => {
+        setListMessage([...listMessage, newMessage]);
+        setInputMessage('');
+      })
     }
   };
 
