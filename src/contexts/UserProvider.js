@@ -1,9 +1,9 @@
-import React, { useState, createContext, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { apiUrl } from './constants';
-import styled from 'styled-components';
-import { Spin } from 'antd';
+import React, { useState, createContext, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { apiConfig, apiUrl } from "./constants";
+import styled from "styled-components";
+import { Spin } from "antd";
 
 const StyledContainer = styled.div`
   margin: 20px 0;
@@ -24,11 +24,11 @@ function UserProvider({ children }) {
   useEffect(() => {
     setIsLoading(true);
     if (user) {
-      navigate('/', {
+      navigate("/", {
         replace: true,
       });
     } else {
-      navigate('/login');
+      navigate("/login");
     }
     setIsLoading(false);
   }, [user]);
@@ -43,15 +43,11 @@ function UserProvider({ children }) {
             {
               token: user.refreshToken,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            }
+            apiConfig
           )
           .then((response) => {
             if (response.data.success) {
-              localStorage.setItem('token', response.data.accessToken);
+              localStorage.setItem("token", response.data.accessToken);
             }
           })
           .catch((err) => {
@@ -69,23 +65,19 @@ function UserProvider({ children }) {
   const getUser = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        navigate('/login');
+        navigate("/login");
       }
-      const response = await axios.get(`${apiUrl}/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`${apiUrl}/users`, apiConfig);
       if (response.data.success) {
         setUser(response.data.info);
       }
     } catch (error) {
       console.log(error);
-      navigate('/login');
+      navigate("/login");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -94,7 +86,7 @@ function UserProvider({ children }) {
       const response = await axios.post(`${apiUrl}/users/login`, data);
       console.log(response.data);
       if (response.data.success) {
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem("token", response.data.accessToken);
         await getUser();
       }
     } catch (error) {
@@ -106,7 +98,7 @@ function UserProvider({ children }) {
       const response = await axios.post(`${apiUrl}/users/register`, data);
       console.log(response.data);
       if (response.data.success) {
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem("token", response.data.accessToken);
       }
     } catch (error) {
       console.log(error);
