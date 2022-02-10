@@ -8,7 +8,9 @@ export const appReducer = (state, action) => {
     case SET_MESSAGES:
       return { ...state, messages: payload };
     case ADD_MESSAGE:
-      return { ...state, messages: [...state.messages, payload]}
+      console.log(payload);
+      console.log({ ...state, messages: [...state.messages, payload] });
+      return { ...state, messages: [...state.messages, payload] };
     default:
       throw new Error("Action not found!");
   }

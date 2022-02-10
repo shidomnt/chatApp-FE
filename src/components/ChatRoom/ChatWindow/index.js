@@ -1,11 +1,11 @@
-import { Input } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { Input } from "antd";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 
-import Message from './Message';
-import Header from './Header';
-import { AppContext } from '../../../contexts/AppProvider';
+import Message from "./Message";
+import Header from "./Header";
+import { AppContext } from "../../../contexts/AppProvider";
 
 const StyledWrapper = styled.div`
   &&& {
@@ -22,7 +22,7 @@ const StyledWrapper = styled.div`
 function ChatWindow() {
   const { roomId } = useParams();
   const [listMessage, setListMessage] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const { getMessage, createMessage } = useContext(AppContext);
 
   useEffect(() => {
@@ -31,12 +31,11 @@ function ChatWindow() {
     });
   }, [roomId]);
 
-  const handleSubmit = () => {
-    if(inputMessage) {
-      createMessage({roomId, content: inputMessage})
-        .then(() => {
-          setInputMessage('')
-        })
+  const handleSubmit = async () => {
+    if (inputMessage) {
+      await createMessage({ roomId, content: inputMessage });
+
+      setInputMessage("");
     }
   };
 
