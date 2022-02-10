@@ -5,17 +5,18 @@ import VirtualList from 'rc-virtual-list';
 import { BellOutlined } from "@ant-design/icons";
 
 function RoomList({ rooms, className }) {
+
   return (
     <div className={className}>
       <List>
         <VirtualList
           data={rooms}
           itemHeight={47}
-          itemKey="id"
+          itemKey="_id"
         >
           {item => (
-            <NavLink className="link" to={`/rooms/${item._id}`} >
-              <List.Item style={{ paddingLeft: 4, paddingRight: 4 }} key={item._id}>
+            <NavLink className="link" to={`/rooms/${item._id}`}>
+              <List.Item style={{ paddingLeft: 4, paddingRight: 4 }} >
                 <List.Item.Meta
                   style={{
                     alignItems: 'center',

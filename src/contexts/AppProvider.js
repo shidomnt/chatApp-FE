@@ -16,7 +16,6 @@ const AppProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(appReducer, {
     rooms: [],
-    activeRoom: null,
     messages: [],
   });
 
@@ -35,7 +34,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_ROOMS, payload: response.data });
   };
 
-  const getMessage = async (roomId) => {
+  const getMessage = async (roomId, callback) => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
@@ -45,12 +44,13 @@ const AppProvider = ({ children }) => {
       apiConfig()
     );
     console.log(response.data);
+    callback(response.data);
     dispatch({ type: SET_MESSAGES, payload: response.data });
   };
 
-  const appConetextData = { state, getMessage };
+  const appContextData = { state, getMessage };
   return (
-    <AppContext.Provider value={appConetextData}>
+    <AppContext.Provider value={appContextData}>
       {children}
     </AppContext.Provider>
   );

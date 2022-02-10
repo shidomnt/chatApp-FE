@@ -1,5 +1,6 @@
 import React from 'react';
 import { Avatar, Comment, List, Tooltip, Typography } from 'antd';
+import moment from 'moment';
 
 function Message({ className, messages }) {
   return (
@@ -16,7 +17,7 @@ function Message({ className, messages }) {
               </Tooltip>
             }
             content={
-              <Tooltip placement="left" title={item.createAt}>
+              <Tooltip placement="left" title={moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}>
                 <Typography.Text
                   style={{
                     backgroundColor: '#e4e6eb',

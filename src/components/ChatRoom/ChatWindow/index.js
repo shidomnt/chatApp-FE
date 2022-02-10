@@ -1,10 +1,11 @@
-import { Input } from "antd";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import { Input } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
-import Message from "./Message";
-import Header from "./Header";
+import Message from './Message';
+import Header from './Header';
+import { AppContext } from '../../../contexts';
 
 const StyledWrapper = styled.div`
   &&& {
@@ -18,37 +19,16 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const messagesList = [
-  {
-    username: "tranha",
-    content: "test",
-    createAt: "time create",
-  },
-  {
-    username: "tranha",
-    content: "test",
-    createAt: "time create",
-  },
-  {
-    username: "tranha",
-    content: "test",
-    createAt: "time create",
-  },
-  {
-    username: "tranha",
-    content: "test",
-    createAt: "time create",
-  },
-];
-
 function ChatWindow() {
   const { roomId } = useParams();
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
+  const [listMessage, setListMessage] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const { getMessage } = useContext(AppContext);
 
   useEffect(() => {
-    // Call API and setMessages()
-    setMessages(messagesList);
+    getMessage(roomId, (messages) => {
+      setListMessage(messages);
+    });
   }, [roomId]);
 
   const handleSubmit = () => {};
@@ -56,7 +36,7 @@ function ChatWindow() {
   return (
     <StyledWrapper>
       <Header />
-      <Message className="messages-list" messages={messages} />
+      <Message className="messages-list" messages={listMessage} />
       <Input
         onPressEnter={handleSubmit}
         onChange={(e) => setInputMessage(e.target.value)}
