@@ -43,7 +43,7 @@ function UserProvider({ children }) {
             {
               token: user.refreshToken,
             },
-            apiConfig
+            apiConfig()
           )
           .then((response) => {
             if (response.data.success) {
@@ -69,7 +69,7 @@ function UserProvider({ children }) {
       if (!token) {
         navigate("/login");
       }
-      const response = await axios.get(`${apiUrl}/users`, apiConfig);
+      const response = await axios.get(`${apiUrl}/users`, apiConfig());
       if (response.data.success) {
         setUser(response.data.info);
       }
