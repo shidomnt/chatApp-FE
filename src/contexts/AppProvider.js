@@ -54,7 +54,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_MESSAGES, payload: response.data });
   };
 
-  const createMessage = async (body) => {
+  const createMessage = async (body, callback) => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
@@ -64,6 +64,7 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
+    callback(response.data);
     dispatch({ type: ADD_MESSAGE, payload: response.data });
   };
 
