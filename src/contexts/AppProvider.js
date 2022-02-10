@@ -1,16 +1,16 @@
-import axios from 'axios';
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { appReducer } from '../reducers/AppReducer';
+import { appReducer } from "../reducers/AppReducer";
 import {
   ADD_MESSAGE,
   apiConfig,
   apiUrl,
   SET_MESSAGES,
   SET_ROOMS,
-} from './constants';
-import { UserContext } from './UserProvider';
+} from "./constants";
+import { UserContext } from "./UserProvider";
 
 const AppContext = createContext();
 
@@ -32,18 +32,18 @@ const AppProvider = ({ children }) => {
   }, [user]);
 
   const getAllRoom = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
     const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
     dispatch({ type: SET_ROOMS, payload: response.data });
   };
 
   const getMessage = async (roomId, callback) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
     const response = await axios.get(
       `${apiUrl}/messages/${roomId}`,
@@ -55,9 +55,9 @@ const AppProvider = ({ children }) => {
   };
 
   const createMessage = async (body, callback) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     }
     const response = await axios.post(
       `${apiUrl}/messages/create`,
