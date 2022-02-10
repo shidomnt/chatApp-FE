@@ -1,4 +1,4 @@
-import { SET_ROOMS, SET_MESSAGES, ADD_MESSAGE } from "../contexts/constants";
+import { SET_ROOMS, SET_MESSAGES, ADD_MESSAGE, ADD_ROOM } from "../contexts/constants";
 
 export const appReducer = (state, action) => {
   const { payload, type } = action;
@@ -8,9 +8,9 @@ export const appReducer = (state, action) => {
     case SET_MESSAGES:
       return { ...state, messages: payload };
     case ADD_MESSAGE:
-      console.log(payload);
-      console.log({ ...state, messages: [...state.messages, payload] });
       return { ...state, messages: [...state.messages, payload] };
+    case ADD_ROOM:
+      return { ...state, rooms: [...state.rooms, payload] };
     default:
       throw new Error("Action not found!");
   }

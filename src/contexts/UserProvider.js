@@ -75,6 +75,7 @@ function UserProvider({ children }) {
       }
     } catch (error) {
       console.log(error);
+      setUser(null);
       navigate("/login");
     } finally {
       setIsLoading(false);
@@ -99,12 +100,21 @@ function UserProvider({ children }) {
       console.log(response.data);
       if (response.data.success) {
         localStorage.setItem("token", response.data.accessToken);
+        await getUser();
       }
     } catch (error) {
       console.log(error);
     }
   };
-  const userContextData = { user, login, register };
+  const signOut = async () => {
+    try {
+      localStorage.setItem("token", "");
+      await getUser()
+    } catch(err) {
+      console.log(err);
+    }
+  }
+  const userContextData = { user, login, register, signOut };
 
   return (
     <UserContext.Provider value={userContextData}>
