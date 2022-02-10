@@ -1,10 +1,10 @@
-import { Input } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 
-import Message from './Message';
-import Header from './Header'
+import Message from "./Message";
+import Header from "./Header";
 
 const StyledWrapper = styled.div`
   &&& {
@@ -20,39 +20,38 @@ const StyledWrapper = styled.div`
 
 const messagesList = [
   {
-    username: 'tranha',
-    content: 'test',
-    createAt: 'time create'
+    username: "tranha",
+    content: "test",
+    createAt: "time create",
   },
   {
-    username: 'tranha',
-    content: 'test',
-    createAt: 'time create'
+    username: "tranha",
+    content: "test",
+    createAt: "time create",
   },
   {
-    username: 'tranha',
-    content: 'test',
-    createAt: 'time create'
+    username: "tranha",
+    content: "test",
+    createAt: "time create",
   },
   {
-    username: 'tranha',
-    content: 'test',
-    createAt: 'time create'
+    username: "tranha",
+    content: "test",
+    createAt: "time create",
   },
-]
+];
 
 function ChatWindow() {
   const { roomId } = useParams();
   const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
 
   useEffect(() => {
     // Call API and setMessages()
     setMessages(messagesList);
   }, [roomId]);
 
-  const handleSubmit = () => {
-  };
+  const handleSubmit = () => {};
 
   return (
     <StyledWrapper>
@@ -63,7 +62,6 @@ function ChatWindow() {
         onChange={(e) => setInputMessage(e.target.value)}
         value={inputMessage}
         placeholder="Enter message..."
-        autoSize
       />
     </StyledWrapper>
   );
