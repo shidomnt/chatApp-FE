@@ -1,7 +1,10 @@
-import React, { useState } from "react"
+import React, { useContext } from "react"
 import { Row, Col, Avatar, Tooltip, Button, Space, Popover, Typography } from 'antd'
-import { UserOutlined, EditOutlined, MoreOutlined, UserAddOutlined } from '@ant-design/icons'
+import { UserOutlined, MoreOutlined, UserAddOutlined } from '@ant-design/icons'
 import styled from "styled-components"
+
+import CreateRoomModal from '../../Modals/CreateRoomModal'
+import { UserContext } from '../../../contexts/UserProvider'
 
 const StyledContent = styled.div`
   border-radius: 10px;
@@ -11,8 +14,9 @@ const StyledContent = styled.div`
 `
 
 function UserInfo({ className }) {
+  const { signOut } = useContext(UserContext);
   const handleSignOut = () => {
-
+    signOut();
   };
 
   return (
@@ -36,7 +40,7 @@ function UserInfo({ className }) {
             <Button type="default" shape="circle" icon={<UserAddOutlined />}></Button>
           </Tooltip>
           <Tooltip title="New">
-            <Button type="default" shape="circle" icon={<EditOutlined />} />
+            <CreateRoomModal />
           </Tooltip>
         </Space>
       </Col>

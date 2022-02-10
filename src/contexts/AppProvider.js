@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { appReducer } from "../reducers/AppReducer";
 import {
   ADD_MESSAGE,
+  ADD_ROOM,
   apiConfig,
   apiUrl,
   SET_MESSAGES,
@@ -68,7 +69,21 @@ const AppProvider = ({ children }) => {
     dispatch({ type: ADD_MESSAGE, payload: response.data });
   };
 
-  const appContextData = { state, getMessage, createMessage };
+  const createRoom = async (body) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+    const response = await axios.post(
+      `${apiUrl}/rooms/create`,
+      body,
+      apiConfig()
+    );
+    dispatch({type: ADD_ROOM, payload: response.data});
+  }
+
+  const appContextData = { state, getMessage, createMessage, createRoom };
+
   return (
     <AppContext.Provider value={appContextData}>{children}</AppContext.Provider>
   );

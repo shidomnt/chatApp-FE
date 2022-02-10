@@ -11,3 +11,4 @@ export const apiConfig = () => {
 export const SET_ROOMS = "SET_ROOMS";
 export const SET_MESSAGES = "SET_MESSAGES";
 export const ADD_MESSAGE = "ADD_MESSAGE";
+export const ADD_ROOM = "ADD_ROOM";

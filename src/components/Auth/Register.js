@@ -64,7 +64,7 @@ function Register() {
           value={confirmPassword}
         />
         <Button onClick={handleSubmit} type="primary" block>
-          Login
+          Register
         </Button>
         <Link to="/login">Login</Link>
       </Col>
