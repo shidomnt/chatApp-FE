@@ -5,7 +5,7 @@ import { Space, Input } from 'antd';
 import RoomList from './RoomList';
 import UserInfo from './UserInfo';
 import { SearchOutlined } from '@ant-design/icons';
-import { AppContext } from '../../../contexts';
+import { AppContext } from '../../../contexts/AppProvider';
 
 const StyledWrapper = styled.div`
   &&& {

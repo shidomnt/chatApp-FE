@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Message from './Message';
 import Header from './Header';
-import { AppContext } from '../../../contexts';
+import { AppContext } from '../../../contexts/AppProvider';
 
 const StyledWrapper = styled.div`
   &&& {
@@ -23,7 +23,7 @@ function ChatWindow() {
   const { roomId } = useParams();
   const [listMessage, setListMessage] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const { getMessage } = useContext(AppContext);
+  const { getMessage, createMessage } = useContext(AppContext);
 
   useEffect(() => {
     getMessage(roomId, (messages) => {
@@ -31,7 +31,14 @@ function ChatWindow() {
     });
   }, [roomId]);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if(inputMessage) {
+      createMessage({roomId, content: inputMessage})
+        .then(() => {
+          setInputMessage('')
+        })
+    }
+  };
 
   return (
     <StyledWrapper>

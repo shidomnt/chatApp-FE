@@ -3,7 +3,7 @@ import { Row, Col, Input, Button } from 'antd';
 import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-import { UserContext } from '../../contexts'
+import { UserContext } from '../../contexts/UserProvider'
 
 function Register() {
   const [username, setUsername] = useState('');

@@ -6,10 +6,10 @@ import "antd/dist/antd.css";
 
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
-import { UserProvider } from "./contexts";
+import { UserProvider } from "./contexts/UserProvider";
 import ChatRoom from "./components/ChatRoom";
 import ChatWindow from "./components/ChatRoom/ChatWindow";
-import { AppProvider } from "./contexts";
+import { AppProvider } from "./contexts/AppProvider";
 
 function App() {
   return (

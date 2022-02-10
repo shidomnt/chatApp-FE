@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-import { UserContext } from '../../contexts';
+import { UserContext } from '../../contexts/UserProvider';
 
 function Login() {
   const [username, setUsername] = useState('');
