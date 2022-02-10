@@ -63,7 +63,6 @@ function ChatWindow() {
         onChange={(e) => setInputMessage(e.target.value)}
         value={inputMessage}
         placeholder="Enter message..."
-        autoSize
       />
     </StyledWrapper>
   );
