@@ -1,12 +1,19 @@
 import React, { useContext, useState } from 'react';
-import { Row, Col, Input, Button } from 'antd';
-import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Row, Col, Input, Button, Tooltip } from 'antd';
+import {
+  UserOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  KeyOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
-import { UserContext } from '../../contexts/UserProvider'
+import { UserContext } from '../../contexts';
 
 function Login() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const { login } = useContext(UserContext);
 
@@ -14,23 +21,30 @@ function Login() {
     if (username && password) {
       await login({
         username,
-        password
+        password,
       });
     }
-  }
+  };
 
   return (
-    <Row justify="space-between">
+    <Row justify="space-around">
       <Col span={6}>
         <Input
           size="large"
-          placeholder="large size"
+          placeholder="username..."
           prefix={<UserOutlined />}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
+          suffix={
+            <Tooltip title="Quy tac dat ten...">
+              <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+            </Tooltip>
+          }
         />
         <Input.Password
-          placeholder="input password"
+          size="large"
+          placeholder="password..."
+          prefix={<KeyOutlined />}
           iconRender={(visible) =>
             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
           }
@@ -40,6 +54,7 @@ function Login() {
         <Button onClick={handleSubmit} type="primary" block>
           Login
         </Button>
+        <Link to="/register">Register</Link>
       </Col>
     </Row>
   );
