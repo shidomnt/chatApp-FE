@@ -33,32 +33,32 @@ function UserProvider({ children }) {
     setIsLoading(false);
   }, [user]);
 
-  useEffect(() => {
-    var intervalId;
-    if (user) {
-      intervalId = setInterval(() => {
-        axios
-          .post(
-            `${apiUrl}/users/refresh`,
-            {
-              token: user.refreshToken,
-            },
-            apiConfig()
-          )
-          .then((response) => {
-            if (response.data.success) {
-              localStorage.setItem("token", response.data.accessToken);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }, 5000);
-    }
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [user]);
+  // useEffect(() => {
+  //   var intervalId;
+  //   if (user) {
+  //     intervalId = setInterval(() => {
+  //       axios
+  //         .post(
+  //           `${apiUrl}/users/refresh`,
+  //           {
+  //             token: user.refreshToken,
+  //           },
+  //           apiConfig()
+  //         )
+  //         .then((response) => {
+  //           if (response.data.success) {
+  //             localStorage.setItem("token", response.data.accessToken);
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }, 5000);
+  //   }
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [user]);
 
   useEffect(() => getUser(), []);
 

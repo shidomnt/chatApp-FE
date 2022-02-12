@@ -1,8 +1,9 @@
-import axios from "axios";
-import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
 
-import { appReducer } from "../reducers/AppReducer";
+import { appReducer } from '../reducers/AppReducer';
 import {
   ADD_MESSAGE,
   ADD_ROOM,
@@ -10,10 +11,14 @@ import {
   apiUrl,
   SET_MESSAGES,
   SET_ROOMS,
-} from "./constants";
-import { UserContext } from "./UserProvider";
+} from './constants';
+import { UserContext } from './UserProvider';
 
 const AppContext = createContext();
+
+const socket = io('http://localhost:4000', {
+  transports: ['websocket'],
+});
 
 const AppProvider = ({ children }) => {
   let navigate = useNavigate();
@@ -32,33 +37,50 @@ const AppProvider = ({ children }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log(`Io connected ${socket.id}`);
+    });
+
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      socket.on('update room', (userId, action) => {
+        if (userId === user._id) {
+          dispatch(action);
+        }
+      })
+    }
+  }, [user])
+
   const getAllRoom = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      navigate("/login");
+      navigate('/login');
     }
     const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
     dispatch({ type: SET_ROOMS, payload: response.data });
   };
 
   const getMessage = async (roomId, callback) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      navigate("/login");
+      navigate('/login');
     }
     const response = await axios.get(
       `${apiUrl}/messages/${roomId}`,
       apiConfig()
     );
-    console.log(response.data);
     callback(response.data);
     dispatch({ type: SET_MESSAGES, payload: response.data });
+    socket.emit('join room', { roomId });
   };
 
   const createMessage = async (body, callback) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      navigate("/login");
+      navigate('/login');
     }
     const response = await axios.post(
       `${apiUrl}/messages/create`,
@@ -79,10 +101,25 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
-    dispatch({type: ADD_ROOM, payload: response.data});
-  }
+    dispatch({ type: ADD_ROOM, payload: response.data });
+    socket.emit('create room', {
+      username: body.username,
+      type: ADD_ROOM,
+      payload: response.data,
+    });
+  };
 
-  const appContextData = { state, getMessage, createMessage, createRoom };
+  const leaveRoom = (roomId) => {
+    socket.emit('leave room', { roomId });
+  };
+
+  const appContextData = {
+    state,
+    getMessage,
+    createMessage,
+    createRoom,
+    leaveRoom,
+  };
 
   return (
     <AppContext.Provider value={appContextData}>{children}</AppContext.Provider>
