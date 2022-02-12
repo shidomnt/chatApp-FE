@@ -21,34 +21,34 @@ const StyledWrapper = styled.div`
 
 function ChatWindow() {
   const { roomId } = useParams();
-  const [listMessage, setListMessage] = useState([]);
+  // const [listMessage, setListMessage] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const appState = useContext(AppContext);
 
-  const { getMessage, createMessage, leaveRoom } = appState;
+  const { getMessage, createMessage, leaveRoom, state } = appState;
 
   useEffect(() => {
-    getMessage(roomId, (messages) => {
-      setListMessage(messages);
-    });
+    getMessage(roomId);
     return () => {
       leaveRoom(roomId);
-    }
+    };
   }, [roomId]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (inputMessage) {
-      createMessage({ roomId, content: inputMessage }, (newMessage) => {
-        setListMessage([...listMessage, newMessage]);
-        setInputMessage("");
-      });
+      // createMessage({ roomId, content: inputMessage }, (newMessage) => {
+      //   setListMessage([...listMessage, newMessage]);
+      //   setInputMessage("");
+      // });
+      await createMessage({ roomId, content: inputMessage });
+      setInputMessage("");
     }
   };
 
   return (
     <StyledWrapper>
       <Header />
-      <Message className="messages-list" messages={listMessage} />
+      <Message className="messages-list" messages={state.messages} />
       <Input
         onPressEnter={handleSubmit}
         onChange={(e) => setInputMessage(e.target.value)}

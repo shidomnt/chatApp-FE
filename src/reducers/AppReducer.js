@@ -1,4 +1,9 @@
-import { SET_ROOMS, SET_MESSAGES, ADD_MESSAGE, ADD_ROOM } from "../contexts/constants";
+import {
+  SET_ROOMS,
+  SET_MESSAGES,
+  ADD_MESSAGE,
+  ADD_ROOM,
+} from "../contexts/constants";
 
 export const appReducer = (state, action) => {
   const { payload, type } = action;
