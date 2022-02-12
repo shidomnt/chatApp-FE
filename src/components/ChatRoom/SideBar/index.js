@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import styled from 'styled-components';
-import { Space, Input } from 'antd';
+import React, { useContext, useState } from "react";
+import styled from "styled-components";
+import { Space, Input } from "antd";
 
-import RoomList from './RoomList';
-import UserInfo from './UserInfo';
-import { SearchOutlined } from '@ant-design/icons';
-import { AppContext } from '../../../contexts/AppProvider';
+import RoomList from "./RoomList";
+import UserInfo from "./UserInfo";
+import { SearchOutlined } from "@ant-design/icons";
+import { AppContext } from "../../../contexts/AppProvider";
 
 const StyledWrapper = styled.div`
   &&& {
@@ -35,7 +35,7 @@ const StyledWrapper = styled.div`
 `;
 
 function SideBar() {
-  const [filterInput, setFilterInput] = useState('');
+  const [filterInput, setFilterInput] = useState("");
   const { state } = useContext(AppContext);
   const { rooms } = state;
 
@@ -51,7 +51,7 @@ function SideBar() {
         />
         <RoomList
           rooms={rooms.filter((room) =>
-            room.name.toLowerCase().includes(filterInput.toLowerCase().trim())
+            room?.name.toLowerCase().includes(filterInput.toLowerCase().trim())
           )}
           className="room-list"
         />
