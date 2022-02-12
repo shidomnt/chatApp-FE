@@ -1,4 +1,7 @@
-export const apiUrl = "http://localhost:4000/api";
+export const apiUrl =
+  process.env.NODE_ENV !== "production"
+    ? "http://localhost:4000/api"
+    : "https://chat-app-11231212312321.herokuapp.com/api";
 
 export const apiConfig = () => {
   return {
