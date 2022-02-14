@@ -26,7 +26,7 @@ function Register() {
           username,
           password,
           email,
-          avatar: imageUrl,
+          avatar: '',
         });
       }
     }
