@@ -13,7 +13,7 @@ const StyledContent = styled.div`
   flex-direction: column;
 `
 
-function UserInfo({ className, avatarSrc }) {
+function UserInfo({ className, username, avatarSrc }) {
   const { signOut } = useContext(UserContext);
   const handleSignOut = () => {
     signOut();
@@ -26,7 +26,7 @@ function UserInfo({ className, avatarSrc }) {
       <Col span={12}>
         <Space>
           <Avatar shape="circle" size="large" {...avatarProp} />
-          <Typography.Text>{"Name"}</Typography.Text>
+          <Typography.Text>{username}</Typography.Text>
         </Space>
       </Col>
       <Col style={{ textAlign: 'right' }} span={12}>
