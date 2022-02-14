@@ -44,7 +44,7 @@ function SideBar() {
   return (
     <StyledWrapper>
       <Space className="space" size="middle" direction="vertical">
-        <UserInfo className="user-info" avatarSrc={user.avatar} />
+        <UserInfo className="user-info" username={user.username} avatarSrc={user.avatar} />
         <Input
           placeholder="Search Room..."
           suffix={<SearchOutlined />}
