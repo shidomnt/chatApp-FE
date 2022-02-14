@@ -13,17 +13,19 @@ const StyledContent = styled.div`
   flex-direction: column;
 `
 
-function UserInfo({ className }) {
+function UserInfo({ className, avatarSrc }) {
   const { signOut } = useContext(UserContext);
   const handleSignOut = () => {
     signOut();
   };
 
+  const avatarProp = avatarSrc ? { src: avatarSrc } : { icon: <UserOutlined /> }
+
   return (
     <Row className={className} align="middle" justify="space-between">
       <Col span={12}>
         <Space>
-          <Avatar size="large" src={""} icon={<UserOutlined />} />
+          <Avatar shape="circle" size="large" {...avatarProp} />
           <Typography.Text>{"Name"}</Typography.Text>
         </Space>
       </Col>

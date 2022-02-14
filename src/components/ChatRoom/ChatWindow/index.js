@@ -47,7 +47,7 @@ function ChatWindow() {
 
   return (
     <StyledWrapper>
-      <Header />
+      <Header activeRoom={state.rooms.find(room => room._id === roomId)} />
       <Message className="messages-list" messages={state.messages} />
       <Input
         onPressEnter={handleSubmit}

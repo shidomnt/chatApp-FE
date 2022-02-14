@@ -3,6 +3,7 @@ import { Avatar, Comment, List, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 
 function Message({ className, messages }) {
+  console.log(messages);
   return (
     <List
       className={className}
@@ -12,8 +13,8 @@ function Message({ className, messages }) {
         <li>
           <Comment
             avatar={
-              <Tooltip placement="left" title={item.username}>
-                <Avatar src="item.avatar" size="default" />
+              <Tooltip placement="left" title={item.user.username}>
+                <Avatar src={item.user?.avatar} size="default" />
               </Tooltip>
             }
             content={

@@ -6,6 +6,7 @@ import RoomList from "./RoomList";
 import UserInfo from "./UserInfo";
 import { SearchOutlined } from "@ant-design/icons";
 import { AppContext } from "../../../contexts/AppProvider";
+import { UserContext } from "../../../contexts/UserProvider"
 
 const StyledWrapper = styled.div`
   &&& {
@@ -37,12 +38,13 @@ const StyledWrapper = styled.div`
 function SideBar() {
   const [filterInput, setFilterInput] = useState("");
   const { state } = useContext(AppContext);
+  const { user } = useContext(UserContext);
   const { rooms } = state;
 
   return (
     <StyledWrapper>
       <Space className="space" size="middle" direction="vertical">
-        <UserInfo className="user-info" />
+        <UserInfo className="user-info" avatarSrc={user.avatar} />
         <Input
           placeholder="Search Room..."
           suffix={<SearchOutlined />}

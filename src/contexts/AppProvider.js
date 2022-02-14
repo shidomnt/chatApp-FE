@@ -16,7 +16,7 @@ import { UserContext } from "./UserProvider";
 
 const AppContext = createContext();
 
-const socket = io("http://localhost:4000", {
+const socket = io("https://chat-app-11231212312321.herokuapp.com", {
   transports: ["websocket"],
 });
 
@@ -127,7 +127,7 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
-    dispatch({ type: ADD_MESSAGE, payload: response.data });
+    // dispatch({ type: ADD_MESSAGE, payload: response.data });
     socket.emit("create message", {
       roomId: body.roomId,
       type: ADD_MESSAGE,
@@ -145,7 +145,7 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
-    dispatch({ type: ADD_ROOM, payload: response.data });
+    // dispatch({ type: ADD_ROOM, payload: response.data });
     socket.emit("create room", {
       username: body.username,
       type: ADD_ROOM,
