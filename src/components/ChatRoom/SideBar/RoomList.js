@@ -35,4 +35,4 @@ function RoomList({ rooms, className }) {
   )
 }
 
-export default RoomList
+export default React.memo(RoomList)

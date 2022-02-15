@@ -9,7 +9,7 @@ import { AppContext } from '../../../contexts/AppProvider';
 import { UserContext } from '../../../contexts/UserProvider';
 
 const StyledWrapper = styled.div`
-  &&& {
+  & {
     background-image: linear-gradient(#fff, #f8f8f8);
     height: 100%;
     display: flex;
@@ -18,8 +18,12 @@ const StyledWrapper = styled.div`
     border-right: 1px solid #e8e8e8;
     .space {
       height: 100%;
-      .ant-space-item:last-child {
-        overflow: auto;
+      & > .ant-space-item:last-child {
+        overflow: hidden;
+        scrollbar-gutter: stable both-edges;
+        &:hover {
+          overflow: auto;
+        }
         flex: 1;
         .room-list .link.active {
           background-color: #f5f5f5;
@@ -28,8 +32,18 @@ const StyledWrapper = styled.div`
           border-radius: 10px;
         }
       }
-      .ant-space-item:last-child::-webkit-scrollbar {
-        display: none;
+      & > .ant-space-item:last-child::-webkit-scrollbar {
+        width: 8px;
+        background-color: #f5f5f5;
+      }
+      & > .ant-space-item:last-child::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: rgba(0,0,0,0.2);
+      }
+      & > .ant-space-item:last-child::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: transparent;
       }
     }
   }

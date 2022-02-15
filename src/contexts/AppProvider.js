@@ -69,6 +69,7 @@ const AppProvider = ({ children }) => {
     }
     const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
     dispatch({ type: SET_ROOMS, payload: response.data });
+    navigate(`/rooms/${response.data[0]._id}`)
   };
 
   const getMessage = async (roomId) => {

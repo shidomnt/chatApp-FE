@@ -39,7 +39,7 @@ function UserProvider({ children }) {
   //     intervalId = setInterval(() => {
   //       axios
   //         .post(
-  //           `${apiUrl}/users/refresh`,
+  //           `${apiUrl}/auth/refresh`,
   //           {
   //             token: user.refreshToken,
   //           },
@@ -69,12 +69,11 @@ function UserProvider({ children }) {
       if (!token) {
         navigate("/login");
       }
-      const response = await axios.get(`${apiUrl}/users`, apiConfig());
+      const response = await axios.get(`${apiUrl}/auth`, apiConfig());
       if (response.data.success) {
         setUser(response.data.info);
       }
     } catch (error) {
-      console.log(error);
       setUser(null);
       navigate("/login");
     } finally {
@@ -84,24 +83,26 @@ function UserProvider({ children }) {
 
   const login = async (data) => {
     try {
-      const response = await axios.post(`${apiUrl}/users/login`, data);
+      const response = await axios.post(`${apiUrl}/auth/login`, data);
       console.log(response.data);
       if (response.data.success) {
         localStorage.setItem("token", response.data.accessToken);
         await getUser();
       }
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
   const register = async (data) => {
     try {
-      const response = await axios.post(`${apiUrl}/users/register`, data);
+      const response = await axios.post(`${apiUrl}/auth/register`, data);
       console.log(response.data);
       if (response.data.success) {
         localStorage.setItem("token", response.data.accessToken);
         await getUser();
       }
+      return response.data;
     } catch (error) {
       console.log(error);
     }

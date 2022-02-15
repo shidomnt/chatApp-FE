@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Row, Col, Input, Button, Tooltip, Typography, Space } from 'antd';
+import { Row, Col, Input, Button, Tooltip, Typography, Space, message } from 'antd';
 import {
   UserOutlined,
   EyeInvisibleOutlined,
@@ -17,12 +17,17 @@ function Login() {
 
   const { login } = useContext(UserContext);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (username && password) {
-      await login({
+      login({
         username,
         password,
-      });
+      })
+        .then(res => {
+          message[res.success ? 'success' : 'error'](res.message)
+        })
+    } else {
+      message.error('Please fill out all fields')
     }
   };
 
@@ -42,6 +47,7 @@ function Login() {
                 <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
               </Tooltip>
             }
+            onPressEnter={handleSubmit}
           />
           <Input.Password
             size="large"
@@ -52,6 +58,7 @@ function Login() {
             }
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            onPressEnter={handleSubmit}
           />
           <Button onClick={handleSubmit} type="primary" block>
             Login
