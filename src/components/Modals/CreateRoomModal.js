@@ -26,6 +26,7 @@ const CreateRoomModal = () => {
 
   const handleCancel = () => {
     setRoomName("");
+    setFriendName("");
     setIsModalVisible(false);
   };
 

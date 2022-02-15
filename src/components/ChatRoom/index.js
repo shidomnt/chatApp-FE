@@ -1,5 +1,5 @@
-import { Row, Col, Divider } from "antd"
-import React, { useState } from "react"
+import { Row, Col } from "antd"
+import React from "react"
 import { Outlet } from 'react-router-dom'
 
 import SideBar from './SideBar'
@@ -7,10 +7,10 @@ import SideBar from './SideBar'
 function ChatRoom() {
   return (
     <Row style={{ height: '100vh' }}>
-      <Col span={5}>
+      <Col style={{height: '100%'}} span={5}>
         <SideBar />
       </Col>
-      <Col span={19}>
+      <Col style={{height: '100%'}} span={19}>
         <Outlet />
       </Col>
     </Row>

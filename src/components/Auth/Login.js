@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Row, Col, Input, Button, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Tooltip, Typography, Space } from 'antd';
 import {
   UserOutlined,
   EyeInvisibleOutlined,
@@ -27,34 +27,37 @@ function Login() {
   };
 
   return (
-    <Row justify="space-around">
+    <Row style={{ height: '100vh', alignItems: 'center' }} justify="space-around">
       <Col span={6}>
-        <Input
-          size="large"
-          placeholder="username..."
-          prefix={<UserOutlined />}
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-          suffix={
-            <Tooltip title="Quy tac dat ten...">
-              <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-            </Tooltip>
-          }
-        />
-        <Input.Password
-          size="large"
-          placeholder="password..."
-          prefix={<KeyOutlined />}
-          iconRender={(visible) =>
-            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-          }
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-        <Button onClick={handleSubmit} type="primary" block>
-          Login
-        </Button>
-        <Link to="/register">Register</Link>
+        <Typography.Title level={3}>Log in to your account</Typography.Title>
+        <Space direction="vertical">
+          <Input
+            size="large"
+            placeholder="username..."
+            prefix={<UserOutlined />}
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            suffix={
+              <Tooltip title="Bla bla...">
+                <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+              </Tooltip>
+            }
+          />
+          <Input.Password
+            size="large"
+            placeholder="password..."
+            prefix={<KeyOutlined />}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+          <Button onClick={handleSubmit} type="primary" block>
+            Login
+          </Button>
+          <Link to="/register">Register</Link>
+        </Space>
       </Col>
     </Row>
   );

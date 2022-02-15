@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
-import styled from "styled-components";
-import { Space, Input } from "antd";
+import React, { useContext, useState } from 'react';
+import styled from 'styled-components';
+import { Space, Input } from 'antd';
 
-import RoomList from "./RoomList";
-import UserInfo from "./UserInfo";
-import { SearchOutlined } from "@ant-design/icons";
-import { AppContext } from "../../../contexts/AppProvider";
-import { UserContext } from "../../../contexts/UserProvider"
+import RoomList from './RoomList';
+import UserInfo from './UserInfo';
+import { SearchOutlined } from '@ant-design/icons';
+import { AppContext } from '../../../contexts/AppProvider';
+import { UserContext } from '../../../contexts/UserProvider';
 
 const StyledWrapper = styled.div`
   &&& {
@@ -19,11 +19,8 @@ const StyledWrapper = styled.div`
     .space {
       height: 100%;
       .ant-space-item:last-child {
+        overflow: auto;
         flex: 1;
-        .room-list {
-          height: 100%;
-          overflow: auto;
-        }
         .room-list .link.active {
           background-color: #f5f5f5;
         }
@@ -31,12 +28,15 @@ const StyledWrapper = styled.div`
           border-radius: 10px;
         }
       }
+      .ant-space-item:last-child::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 `;
 
 function SideBar() {
-  const [filterInput, setFilterInput] = useState("");
+  const [filterInput, setFilterInput] = useState('');
   const { state } = useContext(AppContext);
   const { user } = useContext(UserContext);
   const { rooms } = state;
@@ -44,7 +44,11 @@ function SideBar() {
   return (
     <StyledWrapper>
       <Space className="space" size="middle" direction="vertical">
-        <UserInfo className="user-info" username={user.username} avatarSrc={user.avatar} />
+        <UserInfo
+          className="user-info"
+          username={user.username}
+          avatarSrc={user.avatar}
+        />
         <Input
           placeholder="Search Room..."
           suffix={<SearchOutlined />}

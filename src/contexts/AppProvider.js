@@ -16,7 +16,7 @@ import { UserContext } from "./UserProvider";
 
 const AppContext = createContext();
 
-const socket = io("https://chat-app-11231212312321.herokuapp.com", {
+const socket = io("http://localhost:4000/", {
   transports: ["websocket"],
 });
 
@@ -56,6 +56,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       socket.on("update message", (action) => {
+        console.log(action)
         dispatch(action);
       });
     }
@@ -70,20 +71,6 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_ROOMS, payload: response.data });
   };
 
-  // const getMessage = async (roomId, callback) => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     navigate("/login");
-  //   }
-  //   const response = await axios.get(
-  //     `${apiUrl}/messages/${roomId}`,
-  //     apiConfig()
-  //   );
-  //   callback(response.data);
-  //   dispatch({ type: SET_MESSAGES, payload: response.data });
-  //   socket.emit("join room", { roomId });
-  // };
-
   const getMessage = async (roomId) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -97,26 +84,6 @@ const AppProvider = ({ children }) => {
     socket.emit("join room", { roomId });
   };
 
-  // const createMessage = async (body, callback) => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     navigate("/login");
-  //   }
-  //   const response = await axios.post(
-  //     `${apiUrl}/messages/create`,
-  //     body,
-  //     apiConfig()
-  //   );
-  //   if (typeof callback === "function") {
-  //     callback(response.data);
-  //   }
-  //   dispatch({ type: ADD_MESSAGE, payload: response.data });
-  //   socket.emit("create message", {
-  //     roomId: body.roomId,
-  //     type: ADD_MESSAGE,
-  //     payload: response.data,
-  //   });
-  // };
   const createMessage = async (body) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -145,7 +112,7 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
-    // dispatch({ type: ADD_ROOM, payload: response.data });
+    dispatch({ type: ADD_ROOM, payload: response.data });
     socket.emit("create room", {
       username: body.username,
       type: ADD_ROOM,

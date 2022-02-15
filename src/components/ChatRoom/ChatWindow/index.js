@@ -1,11 +1,11 @@
-import { Input } from "antd";
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import { Input } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
-import Message from "./Message";
-import Header from "./Header";
-import { AppContext } from "../../../contexts/AppProvider";
+import Message from './Message';
+import Header from './Header';
+import { AppContext } from '../../../contexts/AppProvider';
 
 const StyledWrapper = styled.div`
   &&& {
@@ -15,14 +15,18 @@ const StyledWrapper = styled.div`
     padding: 4px;
     .messages-list {
       flex: 1;
+      height: calc(100% - 57px - 37px);
+      overflow: auto;
+    }
+    .messages-list::-webkit-scrollbar {
+      display: none;
     }
   }
 `;
 
 function ChatWindow() {
   const { roomId } = useParams();
-  // const [listMessage, setListMessage] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
+  const [inputMessage, setInputMessage] = useState('');
   const appState = useContext(AppContext);
 
   const { getMessage, createMessage, leaveRoom, state } = appState;
@@ -36,18 +40,14 @@ function ChatWindow() {
 
   const handleSubmit = async () => {
     if (inputMessage) {
-      // createMessage({ roomId, content: inputMessage }, (newMessage) => {
-      //   setListMessage([...listMessage, newMessage]);
-      //   setInputMessage("");
-      // });
       await createMessage({ roomId, content: inputMessage });
-      setInputMessage("");
+      setInputMessage('');
     }
   };
 
   return (
     <StyledWrapper>
-      <Header activeRoom={state.rooms.find(room => room._id === roomId)} />
+      <Header activeRoom={state.rooms.find((room) => room._id === roomId)} />
       <Message className="messages-list" messages={state.messages} />
       <Input
         onPressEnter={handleSubmit}

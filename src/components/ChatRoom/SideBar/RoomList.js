@@ -1,5 +1,5 @@
 import React from "react"
-import { List, Avatar } from 'antd'
+import { List, Avatar, Typography } from 'antd'
 import { NavLink } from "react-router-dom"
 import VirtualList from 'rc-virtual-list';
 import { BellOutlined, UserOutlined } from "@ant-design/icons";
@@ -22,8 +22,8 @@ function RoomList({ rooms, className }) {
                     alignItems: 'center',
                   }}
                   avatar={<Avatar size="large" icon={<UserOutlined />}/>}
-                  title={item.name}
-                  description={"Newest Message"}
+                  title={<Typography.Text ellipsis>{item.name}</Typography.Text>}
+                  description={<Typography.Text type="secondary" ellipsis>{"Newest Message"}</Typography.Text>}
                 />
                 <BellOutlined />
               </List.Item>
