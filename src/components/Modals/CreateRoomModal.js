@@ -41,7 +41,10 @@ const CreateRoomModal = () => {
     if (roomName && friendName) {
       await createRoom({
         name: roomName,
-        username: friendName.split('@').map((item) => item.trim()),
+        username: friendName
+          .split('@')
+          .map((item) => item.trim())
+          .filter((item) => item),
       });
     }
     setFriendName('');
