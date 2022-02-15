@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import {
   Row,
   Col,
@@ -9,12 +9,17 @@ import {
   Popover,
   Typography,
   Popconfirm,
-} from 'antd';
-import { UserOutlined, MoreOutlined, UserAddOutlined, LogoutOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
+} from "antd";
+import {
+  UserOutlined,
+  MoreOutlined,
+  UserAddOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import styled from "styled-components";
 
-import CreateRoomModal from '../../Modals/CreateRoomModal';
-import { UserContext } from '../../../contexts/UserProvider';
+import CreateRoomModal from "../../Modals/CreateRoomModal";
+import { UserContext } from "../../../contexts/UserProvider";
 
 const StyledContent = styled.div`
   border-radius: 10px;
@@ -43,7 +48,7 @@ function UserInfo({ className, username, avatarSrc }) {
           </Typography.Title>
         </Space>
       </Col>
-      <Col style={{ textAlign: 'right' }} span={12}>
+      <Col style={{ textAlign: "right" }} span={12}>
         <Space>
           <Popover
             placement="bottomLeft"
@@ -57,8 +62,8 @@ function UserInfo({ className, username, avatarSrc }) {
                   placement="bottom"
                 >
                   <Button type="default" danger icon={<LogoutOutlined />}>
-                  Sign Out
-                </Button>
+                    Sign Out
+                  </Button>
                 </Popconfirm>
               </StyledContent>
             }
@@ -66,19 +71,7 @@ function UserInfo({ className, username, avatarSrc }) {
           >
             <Button type="default" shape="circle" icon={<MoreOutlined />} />
           </Popover>
-          <Tooltip
-            title={
-              <Typography.Text style={{ color: '#fff' }}>
-                Invite friend
-              </Typography.Text>
-            }
-          >
-            <Button
-              type="default"
-              shape="circle"
-              icon={<UserAddOutlined />}
-            ></Button>
-          </Tooltip>
+
           <CreateRoomModal />
         </Space>
       </Col>

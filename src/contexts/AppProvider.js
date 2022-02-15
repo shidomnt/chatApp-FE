@@ -121,6 +121,22 @@ const AppProvider = ({ children }) => {
     });
   };
 
+  const invite = async (body) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+    const response = await axios.post(
+      `${apiUrl}/rooms/invite`,
+      body,
+      apiConfig()
+    );
+    socket.emit("create room", {
+      friendNameList: body.friendNameList,
+      type: ADD_ROOM,
+      payload: response.data,
+    });
+  };
   const leaveRoom = (roomId) => {
     socket.emit("leave room", { roomId });
   };
@@ -131,6 +147,7 @@ const AppProvider = ({ children }) => {
     createMessage,
     createRoom,
     leaveRoom,
+    invite,
   };
 
   return (
