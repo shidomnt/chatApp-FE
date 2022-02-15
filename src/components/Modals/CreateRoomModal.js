@@ -1,17 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Input, Button, Space, Typography, Mentions } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Modal,
+  Input,
+  Button,
+  Space,
+  Typography,
+  Mentions,
+  message,
+} from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import axios from "axios";
 
-import { AppContext } from '../../contexts/AppProvider';
-import { UserContext } from '../../contexts/UserProvider';
-import { apiUrl } from '../../contexts/constants';
+import { AppContext } from "../../contexts/AppProvider";
+import { UserContext } from "../../contexts/UserProvider";
+import { apiUrl } from "../../contexts/constants";
 
 const CreateRoomModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [roomName, setRoomName] = useState('');
+  const [roomName, setRoomName] = useState("");
   const [friendList, setFriendList] = useState([]);
-  const [friendName, setFriendName] = useState('');
+  const [friendName, setFriendName] = useState("");
 
   const { createRoom } = useContext(AppContext);
   const { user } = useContext(UserContext);
@@ -24,37 +32,32 @@ const CreateRoomModal = () => {
     }
   }, [isModalVisible]);
 
-  useEffect(() => {
-    console.log(
-      friendName
-        .split('@')
-        .map((item) => item.trim())
-        .filter((item) => item)
-    );
-  }, [friendName]);
-
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = async () => {
     if (roomName && friendName) {
+      setIsModalVisible(false);
       await createRoom({
         name: roomName,
-        username: friendName
-          .split('@')
+        friendNameList: friendName
+          .split("@")
           .map((item) => item.trim())
           .filter((item) => item),
       });
+
+      setFriendName("");
+      setRoomName("");
+      message.success("Create successfully!");
+    } else {
+      message.error("Please fill in all the field!");
     }
-    setFriendName('');
-    setRoomName('');
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
-    setRoomName('');
-    setFriendName('');
+    setRoomName("");
+    setFriendName("");
     setIsModalVisible(false);
   };
 
@@ -72,14 +75,14 @@ const CreateRoomModal = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+        <Space direction="vertical" size="large" style={{ width: "100%" }}>
           <Input
             placeholder="Enter room's name..."
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
           />
           <Mentions
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
             onChange={(text) => {
               setFriendName(text);
             }}

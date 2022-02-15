@@ -45,8 +45,8 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      socket.on("update room", (userId, action) => {
-        if (userId === user._id) {
+      socket.on("update room", (allFriendId, action) => {
+        if (allFriendId.includes(user._id)) {
           dispatch(action);
         }
       });
@@ -56,7 +56,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       socket.on("update message", (action) => {
-        console.log(action)
+        console.log(action);
         dispatch(action);
       });
     }
@@ -69,7 +69,7 @@ const AppProvider = ({ children }) => {
     }
     const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
     dispatch({ type: SET_ROOMS, payload: response.data });
-    navigate(`/rooms/${response.data[0]._id}`)
+    navigate(`/rooms/${response.data[0]._id}`);
   };
 
   const getMessage = async (roomId) => {
@@ -115,7 +115,7 @@ const AppProvider = ({ children }) => {
     );
     dispatch({ type: ADD_ROOM, payload: response.data });
     socket.emit("create room", {
-      username: body.username,
+      friendNameList: body.friendNameList,
       type: ADD_ROOM,
       payload: response.data,
     });
