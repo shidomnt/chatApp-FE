@@ -1,9 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal, Input, Button, Space, Typography, Mentions } from "antd";
+import {
+  Modal,
+  Input,
+  Button,
+  Space,
+  Typography,
+  Mentions,
+  message,
+} from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 
 import { AppContext } from "../../contexts/AppProvider";
+import { UserContext } from "../../contexts/UserProvider";
 import { apiUrl } from "../../contexts/constants";
 
 const CreateRoomModal = () => {
@@ -12,8 +21,8 @@ const CreateRoomModal = () => {
   const [friendList, setFriendList] = useState([]);
   const [friendName, setFriendName] = useState("");
 
-  console.log(friendName);
   const { createRoom } = useContext(AppContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (isModalVisible) {
@@ -29,11 +38,21 @@ const CreateRoomModal = () => {
 
   const handleOk = async () => {
     if (roomName && friendName) {
-      await createRoom({ name: roomName, username: friendName });
+      setIsModalVisible(false);
+      await createRoom({
+        name: roomName,
+        friendNameList: friendName
+          .split("@")
+          .map((item) => item.trim())
+          .filter((item) => item),
+      });
+
+      setFriendName("");
+      setRoomName("");
+      message.success("Create successfully!");
+    } else {
+      message.error("Please fill in all the field!");
     }
-    setFriendName("");
-    setRoomName("");
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -64,15 +83,19 @@ const CreateRoomModal = () => {
           />
           <Mentions
             style={{ width: "100%" }}
-            onSelect={(option) => setFriendName(option.value)}
-            defaultValue={friendName}
+            onChange={(text) => {
+              setFriendName(text);
+            }}
+            value={friendName}
             placeholder="Input @ to mention your friends"
           >
-            {friendList.map((friend) => (
-              <Mentions.Option key={friend._id} value={friend.username}>
-                {friend.username}
-              </Mentions.Option>
-            ))}
+            {friendList
+              .filter((friend) => friend._id !== user._id)
+              .map((friend) => (
+                <Mentions.Option key={friend._id} value={friend.username}>
+                  {friend.username}
+                </Mentions.Option>
+              ))}
           </Mentions>
         </Space>
       </Modal>
