@@ -16,7 +16,7 @@ function Header({ activeRoom }) {
         <Col span={12}>
           <Space size="middle">
             <Avatar icon={<UserOutlined />} size="large" />
-            <Typography.Text strong>{activeRoom.name}</Typography.Text>
+            <Typography.Text strong>{activeRoom?.name}</Typography.Text>
           </Space>
         </Col>
         <Col span={12} style={{ textAlign: "right" }}>
