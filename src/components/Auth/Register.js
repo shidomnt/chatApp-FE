@@ -99,7 +99,7 @@ function Register() {
             onPressEnter={handleSubmit}
           />
           <Input type="file" onChange={handleChangeImage} accept="image/*" />
-          <img src={avatarUrl} width="100%" />
+          <img alt="" src={avatarUrl} width="100%" />
           <Button onClick={handleSubmit} type="primary" block>
             Register
           </Button>

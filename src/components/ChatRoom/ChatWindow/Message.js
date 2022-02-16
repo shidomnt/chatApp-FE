@@ -65,9 +65,10 @@ function Message({ className, messages, loading }) {
       className={className}
       itemLayout="horizontal"
       dataSource={messages}
+      rowKey={(item) => item._id}
       renderItem={(item) => (
         <Skeleton loading={loading} active avatar>
-          <li key={item._id}>
+          <li>
             <Comment {...commentProps(item)} />
           </li>
         </Skeleton>

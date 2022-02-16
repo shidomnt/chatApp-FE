@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Row, Col, Avatar, Typography, Space, Button, Tooltip } from "antd";
-import { UserOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Row, Col, Avatar, Typography, Space, Tooltip } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import InviteFriend from "../../Modals/InviteFriend";
 
 const StyledWrapper = styled.div`

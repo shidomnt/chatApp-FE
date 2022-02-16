@@ -3,7 +3,6 @@ import {
   Row,
   Col,
   Avatar,
-  Tooltip,
   Button,
   Space,
   Popover,
@@ -13,7 +12,6 @@ import {
 import {
   UserOutlined,
   MoreOutlined,
-  UserAddOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 import styled from "styled-components";
