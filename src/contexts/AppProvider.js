@@ -114,9 +114,9 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
-    dispatch({ type: ADD_ROOM, payload: response.data });
+    // dispatch({ type: ADD_ROOM, payload: response.data });
     socket.emit('create room', {
-      friendNameList: body.friendNameList,
+      friendNameList: [...body.friendNameList, user.username],
       type: ADD_ROOM,
       payload: response.data,
     });
