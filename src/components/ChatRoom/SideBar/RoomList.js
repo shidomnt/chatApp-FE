@@ -1,26 +1,31 @@
-import React from "react"
-import { List, Avatar, Typography } from 'antd'
-import { NavLink } from "react-router-dom"
-import { BellOutlined, UserOutlined } from "@ant-design/icons";
+import React from 'react';
+import { List, Avatar, Typography } from 'antd';
+import { NavLink } from 'react-router-dom';
+import { BellOutlined, UserOutlined } from '@ant-design/icons';
 
 function RoomList({ rooms, className }) {
-
   return (
     <div className={className}>
       <List
         itemLayout="horizontal"
         dataSource={rooms}
         rowKey={(item) => item._id}
-        renderItem={item => (
+        renderItem={(item) => (
           <NavLink className="link" to={`/rooms/${item._id}`}>
-            <List.Item style={{ paddingLeft: 4, paddingRight: 4 }} >
+            <List.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
               <List.Item.Meta
                 style={{
                   alignItems: 'center',
                 }}
                 avatar={<Avatar size="large" icon={<UserOutlined />} />}
                 title={<Typography.Text ellipsis>{item.name}</Typography.Text>}
-                description={<Typography.Text type="secondary" ellipsis>{"Newest Message"}</Typography.Text>}
+                description={
+                  <Typography.Text type="secondary" ellipsis>
+                    {item.newestMessage
+                      ? `${item.newestMessage?.user?.username}: ${item.newestMessage?.content}`
+                      : ''}
+                  </Typography.Text>
+                }
               />
               <BellOutlined />
             </List.Item>
@@ -28,7 +33,7 @@ function RoomList({ rooms, className }) {
         )}
       />
     </div>
-  )
+  );
 }
 
-export default React.memo(RoomList)
+export default React.memo(RoomList);

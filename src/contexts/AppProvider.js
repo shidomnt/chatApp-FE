@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 
-import { appReducer } from '../reducers/AppReducer';
+import appReducer from '../reducers/AppReducer';
 import {
   ADD_MESSAGE,
   ADD_ROOM,
@@ -12,6 +12,7 @@ import {
   ioUrl,
   SET_MESSAGES,
   SET_ROOMS,
+  UPDATE_NEWEST_MESSAGE,
 } from './constants';
 import { UserContext } from './UserProvider';
 
@@ -102,6 +103,11 @@ const AppProvider = ({ children }) => {
       type: ADD_MESSAGE,
       payload: response.data,
     });
+    socket.emit('update newest message', {
+      roomId: body.roomId,
+      type: UPDATE_NEWEST_MESSAGE,
+      payload: response.data,
+    })
   };
 
   const createRoom = async (body) => {
@@ -120,6 +126,7 @@ const AppProvider = ({ children }) => {
       type: ADD_ROOM,
       payload: response.data,
     });
+    navigate(`/rooms/${response.data._id}`)
   };
 
   const invite = async (body) => {
