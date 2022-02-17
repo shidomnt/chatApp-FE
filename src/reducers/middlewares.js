@@ -13,7 +13,7 @@ const middlewares = {
   },
 
   updateNewestMessage(_state, action, newState) {
-    if (action.type == UPDATE_NEWEST_MESSAGE) {
+    if (action.type === UPDATE_NEWEST_MESSAGE) {
       const { payload: { roomId } } = action;
 
       axios.patch(`${apiUrl}/rooms/${roomId}`, {

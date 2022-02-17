@@ -16,7 +16,7 @@ import {
 } from './constants';
 import { UserContext } from './UserProvider';
 
-const AppContext = createContext();
+const AppContext = createContext(null);
 
 const socket = io(ioUrl, {
   transports: ['websocket'],
@@ -74,6 +74,9 @@ const AppProvider = ({ children }) => {
     navigate(`/rooms/${response.data[0]?._id ?? ''}`);
   };
 
+  /**
+   * @type {(roomId: string) => void}
+   */
   const getMessage = async (roomId) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -87,6 +90,9 @@ const AppProvider = ({ children }) => {
     socket.emit('join room', { roomId });
   };
 
+  /**
+   * @type {(body: { roomId: string, content: string }) => void}
+   */
   const createMessage = async (body) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -107,9 +113,13 @@ const AppProvider = ({ children }) => {
       roomId: body.roomId,
       type: UPDATE_NEWEST_MESSAGE,
       payload: response.data,
-    })
+    });
   };
 
+  /**
+   * @type {(body: {name: string, friendNameList: string[]}) => void}
+   * 
+   */
   const createRoom = async (body) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -126,9 +136,13 @@ const AppProvider = ({ children }) => {
       type: ADD_ROOM,
       payload: response.data,
     });
-    navigate(`/rooms/${response.data._id}`)
+    navigate(`/rooms/${response.data._id}`);
   };
 
+  /**
+   * @type {(body: {name: string, friendNameList: string[]}) => void}
+   *
+   */
   const invite = async (body) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -145,7 +159,12 @@ const AppProvider = ({ children }) => {
       payload: response.data,
     });
   };
-  const leaveRoom = (roomId) => {
+
+  /**
+   * @type {(roomId: string) => void}
+   *
+   */
+  let leaveRoom = (roomId) => {
     socket.emit('leave room', { roomId });
   };
 

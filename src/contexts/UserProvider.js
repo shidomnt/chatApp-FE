@@ -1,9 +1,9 @@
-import React, { useState, createContext, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { apiConfig, apiUrl } from "./constants";
-import styled from "styled-components";
-import { Spin } from "antd";
+import React, { useState, createContext, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { apiConfig, apiUrl } from './constants';
+import styled from 'styled-components';
+import { Spin } from 'antd';
 
 const StyledContainer = styled.div`
   margin: 20px 0;
@@ -24,11 +24,11 @@ function UserProvider({ children }) {
   useEffect(() => {
     setIsLoading(true);
     if (user) {
-      navigate("/", {
+      navigate('/', {
         replace: true,
       });
     } else {
-      navigate("/login");
+      navigate('/login');
     }
     setIsLoading(false);
   }, [user]);
@@ -65,9 +65,9 @@ function UserProvider({ children }) {
   const getUser = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
-        navigate("/login");
+        navigate('/login');
       }
       const response = await axios.get(`${apiUrl}/auth`, apiConfig());
       if (response.data.success) {
@@ -75,18 +75,22 @@ function UserProvider({ children }) {
       }
     } catch (error) {
       setUser(null);
-      navigate("/login");
+      navigate('/login');
     } finally {
       setIsLoading(false);
     }
   };
 
+  /**
+   * @type {(data: {username: string, password: string}) => void}
+   *
+   */
   const login = async (data) => {
     try {
       const response = await axios.post(`${apiUrl}/auth/login`, data);
       console.log(response.data);
       if (response.data.success) {
-        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem('token', response.data.accessToken);
         await getUser();
       }
       return response.data;
@@ -94,12 +98,17 @@ function UserProvider({ children }) {
       console.log(error);
     }
   };
+
+  /**
+   * @type {(data: {username: string, password: string, email: string, avatar?: string}) => { success: boolean, message: string}}
+   *
+   */
   const register = async (data) => {
     try {
       const response = await axios.post(`${apiUrl}/auth/register`, data);
       console.log(response.data);
       if (response.data.success) {
-        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem('token', response.data.accessToken);
         await getUser();
       }
       return response.data;
@@ -109,12 +118,12 @@ function UserProvider({ children }) {
   };
   const signOut = async () => {
     try {
-      localStorage.setItem("token", "");
-      await getUser()
-    } catch(err) {
+      localStorage.setItem('token', '');
+      await getUser();
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
   const userContextData = { user, login, register, signOut };
 
   return (
