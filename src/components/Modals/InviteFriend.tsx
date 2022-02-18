@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Space, Typography, Mentions, message } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -7,15 +7,16 @@ import { AppContext } from "../../contexts/AppProvider";
 import { User, UserContext } from "../../contexts/UserProvider";
 import { apiConfig, apiUrl } from "../../contexts/constants";
 import { useParams } from "react-router-dom";
+import { useAppContext, useUserContext } from "../../hooks";
 
 const InviteFriend = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [friendList, setFriendList] = useState<User[]>([]);
   const [friendName, setFriendName] = useState("");
   const { roomId } = useParams();
-  const { invite } = useContext(AppContext) as AppContext;
+  const { invite } = useAppContext() as AppContext;
 
-  const { user } = useContext(UserContext) as UserContext;
+  const { user } = useUserContext() as UserContext;
 
   useEffect(() => {
     if (isModalVisible && roomId) {
@@ -63,7 +64,7 @@ const InviteFriend = () => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Button
         type="default"
         shape="circle"
@@ -95,7 +96,7 @@ const InviteFriend = () => {
           </Mentions>
         </Space>
       </Modal>
-    </>
+    </React.Fragment>
   );
 };
 

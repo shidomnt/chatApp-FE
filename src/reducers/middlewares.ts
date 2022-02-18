@@ -3,14 +3,23 @@ import { apiConfig, apiUrl, UPDATE_NEWEST_MESSAGE } from '../contexts/constants'
 import { State, Action, Reducer } from './AppReducer'
 
 interface ApplyMiddleWare<Type> {
-  (middlewares: ("updateNewestMessage" | "sortRoomList")[]): Reducer<Type>
+  (middlewares: (keyof MiddlewareObj)[]): Reducer<Type>
 }
 
 interface Middleware<Type> {
   (reducer: Reducer<Type>): ApplyMiddleWare<Type>
+};
+
+interface MiddlewareFC {
+  (state: State, action: Action, newState: State) : State
+};
+
+interface MiddlewareObj {
+  sortRoomList: MiddlewareFC;
+  updateNewestMessage: MiddlewareFC;
 }
 
-const middlewares = {
+const middlewares: MiddlewareObj = {
   sortRoomList(_state: State, _action: Action, newState: State) {
     const rooms = newState.rooms.sort((a, b) => {
       return new Date(b.newestMessage?.createdAt).getTime() - new Date(a.newestMessage?.createdAt).getTime();

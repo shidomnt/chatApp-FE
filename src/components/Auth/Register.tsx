@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useContext, useState } from 'react';
+import React, { ChangeEventHandler, useState } from 'react';
 import { Row, Col, Input, Button, Typography, Space, message } from 'antd';
 import {
   UserOutlined,
@@ -9,16 +9,17 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-import { UserContext } from '../../contexts/UserProvider';
+import { User, UserContext } from '../../contexts/UserProvider';
+import { useUserContext } from '../../hooks';
 
 function Register() {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState<User['username']>('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
 
-  const { register } = useContext(UserContext) as UserContext;
+  const { register } = useUserContext() as UserContext;
 
   const handleSubmit = () => {
     if (username && password && confirmPassword) {
@@ -50,8 +51,7 @@ function Register() {
     }
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
-      if (e.target !== null)
-      setAvatarUrl(e.target.result as string);
+      if (e.target !== null) setAvatarUrl(e.target.result as string);
     };
     fileReader.readAsDataURL(file);
   };

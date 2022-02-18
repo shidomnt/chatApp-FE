@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Input,
@@ -14,19 +14,21 @@ import axios from "axios";
 import { AppContext } from "../../contexts/AppProvider";
 import { User, UserContext } from "../../contexts/UserProvider";
 import { apiConfig, apiUrl } from "../../contexts/constants";
+import { Room } from "../../reducers/AppReducer";
+import { useAppContext, useUserContext } from "../../hooks";
 
 const CreateRoomModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [roomName, setRoomName] = useState("");
+  const [roomName, setRoomName] = useState<Room["name"]>("");
   const [friendList, setFriendList] = useState<User[]>([]);
   const [friendName, setFriendName] = useState("");
 
-  const { createRoom } = useContext(AppContext) as AppContext;
-  const { user } = useContext(UserContext) as UserContext;
+  const { createRoom } = useAppContext() as AppContext;
+  const { user } = useUserContext() as UserContext;
 
   useEffect(() => {
     if (isModalVisible) {
-      axios.get(`${apiUrl}/users/`, apiConfig()).then((res) => {
+      axios.get<User[]>(`${apiUrl}/users/`, apiConfig()).then((res) => {
         setFriendList(res.data);
       });
     }
@@ -62,7 +64,7 @@ const CreateRoomModal = () => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Button
         type="default"
         shape="circle"
@@ -99,7 +101,7 @@ const CreateRoomModal = () => {
           </Mentions>
         </Space>
       </Modal>
-    </>
+    </React.Fragment>
   );
 };
 

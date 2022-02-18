@@ -15,3 +15,5 @@ export const SET_MESSAGES = 'SET_MESSAGES';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const ADD_ROOM = 'ADD_ROOM';
 export const UPDATE_NEWEST_MESSAGE = 'UPDATE_NEWEST_MESSAGE'
+
+export type ActionList = 'SET_ROOMS' | 'SET_MESSAGES' | 'ADD_ROOM' | 'ADD_MESSAGE' | 'UPDATE_NEWEST_MESSAGE'

@@ -4,6 +4,7 @@ import {
   ADD_MESSAGE,
   ADD_ROOM,
   UPDATE_NEWEST_MESSAGE,
+  ActionList,
 } from "../contexts/constants";
 import { User } from "../contexts/UserProvider";
 import middlewares from './middlewares';
@@ -32,7 +33,7 @@ interface State {
 };
 
 interface Action {
-  type: string,
+  type: ActionList,
   payload: any
 };
 

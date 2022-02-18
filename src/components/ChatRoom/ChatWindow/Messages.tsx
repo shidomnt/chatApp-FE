@@ -1,19 +1,28 @@
-import React, { useContext, useEffect } from 'react';
-import { Avatar, Comment, CommentProps, List, Skeleton, Tooltip, Typography } from 'antd';
+import React, { useEffect } from 'react';
+import {
+  Avatar,
+  Comment,
+  CommentProps,
+  List,
+  Skeleton,
+  Tooltip,
+  Typography,
+} from 'antd';
 import moment from 'moment';
 
-import { User, UserContext } from '../../../contexts/UserProvider';
+import { UserContext } from '../../../contexts/UserProvider';
 import { UserOutlined } from '@ant-design/icons';
 import { Message } from '../../../reducers/AppReducer';
+import { useUserContext } from '../../../hooks';
 
 type MessageProps = {
-  className: string,
-  messages: Message[],
-  loading: boolean
-}
+  className: string;
+  messages: Message[];
+  loading: boolean;
+};
 
 function Messages({ className, messages, loading }: MessageProps) {
-  const { user } = useContext(UserContext) as UserContext;
+  const { user } = useUserContext() as UserContext;
 
   useEffect(() => {
     document
@@ -21,7 +30,7 @@ function Messages({ className, messages, loading }: MessageProps) {
       .scrollTo(0, document.querySelector('.' + className)!.scrollHeight);
   }, [messages, className]);
 
-  const commentProps:(item: Message) => CommentProps = (item) => ({
+  const commentProps: (item: Message) => CommentProps = (item) => ({
     style: { textAlign: item.userId === user._id ? 'right' : 'left' },
     avatar:
       item.userId === user._id ? (
@@ -58,7 +67,7 @@ function Messages({ className, messages, loading }: MessageProps) {
             borderRadius: '20px',
             display: 'inline-block',
             maxWidth: '40%',
-            textAlign: 'left'
+            textAlign: 'left',
           }}
         >
           {item.content}

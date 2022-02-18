@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Row,
   Col,
@@ -18,6 +18,7 @@ import styled from "styled-components";
 
 import CreateRoomModal from "../../Modals/CreateRoomModal";
 import { UserContext } from "../../../contexts/UserProvider";
+import { useUserContext } from "../../../hooks";
 
 const StyledContent = styled.div`
   border-radius: 10px;
@@ -33,7 +34,7 @@ interface UserInfoProps {
 }
 
 function UserInfo({ className, username, avatarSrc }: UserInfoProps) {
-  const { signOut } = useContext(UserContext) as UserContext;
+  const { signOut } = useUserContext() as UserContext;
   const handleSignOut = () => {
     signOut();
   };

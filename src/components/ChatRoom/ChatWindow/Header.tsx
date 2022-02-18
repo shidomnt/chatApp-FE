@@ -10,7 +10,9 @@ const StyledWrapper = styled.div`
   padding: 8px 8px;
 `;
 
-function Header({ activeRoom } : { activeRoom: Room}) {
+type HeaderProps =  { activeRoom: Room};
+
+function Header({ activeRoom } : HeaderProps) {
   return (
     <StyledWrapper>
       <Row>

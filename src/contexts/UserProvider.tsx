@@ -75,9 +75,7 @@ function UserProvider({ children }: { children: JSX.Element}) {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const interval = useRef() as unknown as {
-    current: ReturnType<typeof setInterval>;
-  };
+  const interval = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
     setIsLoading(true);
@@ -113,7 +111,7 @@ function UserProvider({ children }: { children: JSX.Element}) {
       }, 1800000);
     }
     return () => {
-      clearInterval(interval.current);
+      clearInterval(interval.current as NodeJS.Timer);
     };
   }, [user]);
 
@@ -179,7 +177,7 @@ function UserProvider({ children }: { children: JSX.Element}) {
       console.log(err);
     }
   };
-  const userContextData: UserContext = { user, login, register, signOut } as UserContext;
+  const userContextData = { user, login, register, signOut } as UserContext;
 
   return (
     <UserContext.Provider value={userContextData}>

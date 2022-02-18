@@ -61,7 +61,7 @@ function ChatWindow() {
     };
   }, [roomId, getMessage, socket]);
 
-  const handleSubmit = () => {
+  const handleSubmit: React.KeyboardEventHandler<HTMLInputElement> = () => {
     if (inputMessage) {
       createMessage({ roomId: roomId as string, content: inputMessage }).then(() => {
         setInputMessage('');
