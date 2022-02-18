@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { AppContext } from "../../contexts/AppProvider";
 import { UserContext } from "../../contexts/UserProvider";
-import { apiUrl } from "../../contexts/constants";
+import { apiConfig, apiUrl } from "../../contexts/constants";
 import { useParams } from "react-router-dom";
 
 const InviteFriend = () => {
@@ -20,8 +20,8 @@ const InviteFriend = () => {
   useEffect(() => {
     if (isModalVisible && roomId) {
       Promise.all([
-        axios.get(`${apiUrl}/users/`),
-        axios.post(`${apiUrl}/users/filter`, { roomId }),
+        axios.get(`${apiUrl}/users/`, apiConfig()),
+        axios.post(`${apiUrl}/users/filter`, { roomId }, apiConfig()),
       ]).then(([allFriend, friendInRoom]) => {
         const friendNameInRoom = friendInRoom.data.map(
           (friend) => friend.username
