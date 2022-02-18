@@ -1,12 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Space, Input } from 'antd';
 
 import RoomList from './RoomList';
 import UserInfo from './UserInfo';
 import { SearchOutlined } from '@ant-design/icons';
-import { AppContext } from '../../../contexts/AppProvider';
-import { UserContext } from '../../../contexts/UserProvider';
+import { useAppContext, useUserContext } from '../../../hooks';
 
 const StyledWrapper = styled.div`
   & {
@@ -51,8 +50,8 @@ const StyledWrapper = styled.div`
 
 function SideBar() {
   const [filterInput, setFilterInput] = useState('');
-  const { state } = useContext(AppContext);
-  const { user } = useContext(UserContext);
+  const { state } = useAppContext();
+  const { user } = useUserContext();
   const { rooms } = state;
 
   return (

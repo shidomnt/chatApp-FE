@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { useState, createContext, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { apiConfig, apiUrl } from './constants';
@@ -20,6 +20,7 @@ function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const interval = useRef();
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,36 +34,33 @@ function UserProvider({ children }) {
     setIsLoading(false);
   }, [user]);
 
-  // useEffect(() => {
-  //   var intervalId;
-  //   if (user) {
-  //     intervalId = setInterval(() => {
-  //       axios
-  //         .post(
-  //           `${apiUrl}/auth/refresh`,
-  //           {
-  //             token: user.refreshToken,
-  //           },
-  //           apiConfig()
-  //         )
-  //         .then((response) => {
-  //           if (response.data.success) {
-  //             localStorage.setItem("token", response.data.accessToken);
-  //           }
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //         });
-  //     }, 5000);
-  //   }
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      interval.current = setInterval(() => {
+        axios
+          .post(
+            `${apiUrl}/auth/refresh`,
+            {
+              token: user.refreshToken,
+            },
+            apiConfig()
+          )
+          .then((response) => {
+            if (response.data.success) {
+              localStorage.setItem('token', response.data.accessToken);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 1800000);
+    }
+    return () => {
+      clearInterval(interval.current);
+    };
+  }, [user]);
 
-  useEffect(() => getUser(), []);
-
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
@@ -79,12 +77,10 @@ function UserProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  /**
-   * @type {(data: {username: string, password: string}) => void}
-   *
-   */
+  useEffect(() => getUser(), [getUser]);
+
   const login = async (data) => {
     try {
       const response = await axios.post(`${apiUrl}/auth/login`, data);
@@ -99,10 +95,6 @@ function UserProvider({ children }) {
     }
   };
 
-  /**
-   * @type {(data: {username: string, password: string, email: string, avatar?: string}) => { success: boolean, message: string}}
-   *
-   */
   const register = async (data) => {
     try {
       const response = await axios.post(`${apiUrl}/auth/register`, data);
@@ -119,7 +111,7 @@ function UserProvider({ children }) {
   const signOut = async () => {
     try {
       localStorage.setItem('token', '');
-      await getUser();
+      navigate('/login');
     } catch (err) {
       console.log(err);
     }

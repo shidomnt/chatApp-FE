@@ -1,7 +1,11 @@
 import axios from 'axios';
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useReducer,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
 
 import appReducer from '../reducers/AppReducer';
 import {
@@ -9,24 +13,20 @@ import {
   ADD_ROOM,
   apiConfig,
   apiUrl,
-  ioUrl,
   SET_MESSAGES,
   SET_ROOMS,
   UPDATE_NEWEST_MESSAGE,
 } from './constants';
-import { UserContext } from './UserProvider';
+import { useSocket, useUserContext } from '../hooks'
 
 const AppContext = createContext(null);
-
-const socket = io(ioUrl, {
-  transports: ['websocket'],
-});
+const DispatchContext = createContext(null);
 
 const AppProvider = ({ children }) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const socket = useSocket();
 
-  // userContext
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
 
   const [state, dispatch] = useReducer(appReducer, {
     rooms: [],
@@ -35,15 +35,14 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (user) {
+      const getAllRoom = async () => {
+        const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
+        dispatch({ type: SET_ROOMS, payload: response.data });
+        navigate(`/rooms/${response.data[0]?._id ?? ''}`);
+      };
       getAllRoom();
     }
   }, [user]);
-
-  useEffect(() => {
-    socket.on('connect', () => {
-      console.log(`Io connected ${socket.id}`);
-    });
-  }, []);
 
   useEffect(() => {
     if (user) {
@@ -53,7 +52,7 @@ const AppProvider = ({ children }) => {
         }
       });
     }
-  }, [user]);
+  }, [user, socket]);
 
   useEffect(() => {
     if (user) {
@@ -62,42 +61,18 @@ const AppProvider = ({ children }) => {
         dispatch(action);
       });
     }
-  }, [user]);
+  }, [user, socket]);
 
-  const getAllRoom = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
-    const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
-    dispatch({ type: SET_ROOMS, payload: response.data });
-    navigate(`/rooms/${response.data[0]?._id ?? ''}`);
-  };
-
-  /**
-   * @type {(roomId: string) => void}
-   */
-  const getMessage = async (roomId) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
+  const getMessage = useCallback(async (roomId) => {
     const response = await axios.get(
       `${apiUrl}/messages/${roomId}`,
       apiConfig()
     );
     dispatch({ type: SET_MESSAGES, payload: response.data });
     socket.emit('join room', { roomId });
-  };
+  }, [socket]);
 
-  /**
-   * @type {(body: { roomId: string, content: string }) => void}
-   */
-  const createMessage = async (body) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
+  const createMessage = useCallback(async (body) => {
     const response = await axios.post(
       `${apiUrl}/messages/create`,
       body,
@@ -114,17 +89,9 @@ const AppProvider = ({ children }) => {
       type: UPDATE_NEWEST_MESSAGE,
       payload: response.data,
     });
-  };
+  }, [socket]);
 
-  /**
-   * @type {(body: {name: string, friendNameList: string[]}) => void}
-   * 
-   */
-  const createRoom = async (body) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
+  const createRoom = useCallback(async (body) => {
     const response = await axios.post(
       `${apiUrl}/rooms/create`,
       body,
@@ -137,17 +104,9 @@ const AppProvider = ({ children }) => {
       payload: response.data,
     });
     navigate(`/rooms/${response.data._id}`);
-  };
+  }, [socket, user]);
 
-  /**
-   * @type {(body: {name: string, friendNameList: string[]}) => void}
-   *
-   */
-  const invite = async (body) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
+  const invite = useCallback(async (body) => {
     const response = await axios.post(
       `${apiUrl}/rooms/invite`,
       body,
@@ -158,28 +117,21 @@ const AppProvider = ({ children }) => {
       type: ADD_ROOM,
       payload: response.data,
     });
-  };
-
-  /**
-   * @type {(roomId: string) => void}
-   *
-   */
-  let leaveRoom = (roomId) => {
-    socket.emit('leave room', { roomId });
-  };
+  }, [socket]);
 
   const appContextData = {
     state,
     getMessage,
     createMessage,
     createRoom,
-    leaveRoom,
     invite,
   };
 
   return (
-    <AppContext.Provider value={appContextData}>{children}</AppContext.Provider>
+    <DispatchContext.Provider value={dispatch}>
+      <AppContext.Provider value={appContextData}>{children}</AppContext.Provider>
+    </DispatchContext.Provider>
   );
 };
 
-export { AppProvider, AppContext };
+export { AppProvider, AppContext, DispatchContext };
