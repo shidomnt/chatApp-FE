@@ -4,8 +4,9 @@ import {
   ADD_MESSAGE,
   ADD_ROOM,
   UPDATE_NEWEST_MESSAGE,
+  DELETE_MESSAGE,
 } from "../contexts/constants";
-import middlewares from './middlewares';
+import middlewares from "./middlewares";
 
 const appReducer = (state, action) => {
   const { payload, type } = action;
@@ -16,14 +17,23 @@ const appReducer = (state, action) => {
       return { ...state, messages: payload };
     case ADD_MESSAGE:
       return { ...state, messages: [...state.messages, payload] };
+    case DELETE_MESSAGE:
+      const updateMessage = state.messages.filter(
+        (message) => message._id !== payload._id
+      );
+      return { ...state, messages: updateMessage };
     case ADD_ROOM:
       return { ...state, rooms: [payload, ...state.rooms] };
     case UPDATE_NEWEST_MESSAGE:
-      const rooms = state.rooms.map(room => room._id === payload.roomId ? {...room, newestMessage: {...payload}} : room);
-      return { ...state, rooms }
+      const rooms = state.rooms.map((room) =>
+        room._id === payload.roomId
+          ? { ...room, newestMessage: { ...payload } }
+          : room
+      );
+      return { ...state, rooms };
     default:
       throw new Error("Action not found!");
   }
 };
 
-export default middlewares(appReducer)(['sortRoomList', 'updateNewestMessage']);
+export default middlewares(appReducer)(["sortRoomList", "updateNewestMessage"]);
