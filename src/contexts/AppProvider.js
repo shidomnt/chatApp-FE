@@ -10,6 +10,7 @@ import {
   apiConfig,
   apiUrl,
   DELETE_MESSAGE,
+  DELETE_ROOM,
   ioUrl,
   SET_MESSAGES,
   SET_ROOMS,
@@ -160,6 +161,18 @@ const AppProvider = ({ children }) => {
     });
     navigate(`/rooms/${response.data._id}`);
   };
+  const deleteRoom = async (idRoom) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+    const response = await axios.delete(
+      `${apiUrl}/rooms/${idRoom}`,
+      apiConfig()
+    );
+    dispatch({ type: DELETE_ROOM, payload: response.data });
+    navigate(`/rooms`);
+  };
 
   /**
    * @type {(body: {name: string, friendNameList: string[]}) => void}
@@ -198,6 +211,7 @@ const AppProvider = ({ children }) => {
     leaveRoom,
     invite,
     deleteMessage,
+    deleteRoom,
   };
 
   return (

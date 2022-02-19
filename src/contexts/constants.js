@@ -16,3 +16,4 @@ export const ADD_MESSAGE = "ADD_MESSAGE";
 export const ADD_ROOM = "ADD_ROOM";
 export const UPDATE_NEWEST_MESSAGE = "UPDATE_NEWEST_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
+export const DELETE_ROOM = "DELETE_ROOM";

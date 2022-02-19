@@ -13,7 +13,7 @@ import axios from "axios";
 
 import { AppContext } from "../../contexts/AppProvider";
 import { UserContext } from "../../contexts/UserProvider";
-import { apiUrl } from "../../contexts/constants";
+import { apiConfig, apiUrl } from "../../contexts/constants";
 
 const CreateRoomModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -26,7 +26,7 @@ const CreateRoomModal = () => {
 
   useEffect(() => {
     if (isModalVisible) {
-      axios.get(`${apiUrl}/users/`).then((res) => {
+      axios.get(`${apiUrl}/users/`, apiConfig()).then((res) => {
         setFriendList(res.data);
       });
     }

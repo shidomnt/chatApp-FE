@@ -5,6 +5,7 @@ import {
   ADD_ROOM,
   UPDATE_NEWEST_MESSAGE,
   DELETE_MESSAGE,
+  DELETE_ROOM,
 } from "../contexts/constants";
 import middlewares from "./middlewares";
 
@@ -24,6 +25,11 @@ const appReducer = (state, action) => {
       return { ...state, messages: updateMessage };
     case ADD_ROOM:
       return { ...state, rooms: [payload, ...state.rooms] };
+    case DELETE_ROOM:
+      const updateRoom = state.rooms.filter(
+        (room) => room._id !== payload.roomId
+      );
+      return { ...state, rooms: updateRoom };
     case UPDATE_NEWEST_MESSAGE:
       const rooms = state.rooms.map((room) =>
         room._id === payload.roomId
