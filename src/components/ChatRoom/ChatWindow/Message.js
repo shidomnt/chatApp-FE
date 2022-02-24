@@ -6,7 +6,6 @@ import {
   Skeleton,
   Tooltip,
   Typography,
-  Text,
   Button,
   message,
 } from "antd";
@@ -58,9 +57,24 @@ function Message({ className, messages, loading }) {
         </Tooltip>
       ),
     content: (
-      <>
+      <Tooltip
+        placement="right"
+        title={
+          <Button
+            onClick={() => {
+              hanleDeleteMessage({
+                userId: item.userId,
+                idMessage: item._id,
+                roomId: item.roomId,
+              });
+            }}
+          >
+            <EllipsisOutlined />
+          </Button>
+        }
+      >
         <Tooltip
-          placement="left"
+          placement={item.userId === user._id ? "top" : "left"}
           title={
             <>
               <Typography.Text style={{ color: "#fff" }}>
@@ -82,25 +96,7 @@ function Message({ className, messages, loading }) {
             {item.content}
           </Typography.Text>
         </Tooltip>
-        <Tooltip
-          placement="right"
-          title={
-            <Button
-              onClick={() => {
-                hanleDeleteMessage({
-                  userId: item.userId,
-                  idMessage: item._id,
-                  roomId: item.roomId,
-                });
-              }}
-            >
-              <EllipsisOutlined />
-            </Button>
-          }
-        >
-          &#12644;
-        </Tooltip>
-      </>
+      </Tooltip>
     ),
   });
 

@@ -35,37 +35,32 @@ function Header({ activeRoom }) {
           </Space>
         </Col>
         <Col span={12} style={{ textAlign: "right" }}>
-          <Row>
-            <Col span={20}></Col>
-            <Col span={2}>
-              <Tooltip
-                title={
-                  <Typography.Text style={{ color: "#fff" }}>
-                    Invite friend
-                  </Typography.Text>
-                }
-              >
-                <InviteFriend />
-              </Tooltip>
-            </Col>
+          <Space>
+            <Tooltip
+              title={
+                <Typography.Text style={{ color: "#fff" }}>
+                  Invite friend
+                </Typography.Text>
+              }
+            >
+              <InviteFriend />
+            </Tooltip>
 
-            <Col span={2} style={{ textAlign: "right" }}>
-              <Tooltip
-                title={
-                  <Typography.Text style={{ color: "#fff" }}>
-                    Leave room
-                  </Typography.Text>
-                }
-              >
-                <Button
-                  type="default"
-                  shape="circle"
-                  icon={<LogoutOutlined />}
-                  onClick={hanleDeleteRoom}
-                />
-              </Tooltip>
-            </Col>
-          </Row>
+            <Tooltip
+              title={
+                <Typography.Text style={{ color: "#fff" }}>
+                  Leave room
+                </Typography.Text>
+              }
+            >
+              <Button
+                type="default"
+                shape="circle"
+                icon={<LogoutOutlined />}
+                onClick={hanleDeleteRoom}
+              />
+            </Tooltip>
+          </Space>
         </Col>
       </Row>
     </StyledWrapper>
