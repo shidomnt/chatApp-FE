@@ -16,7 +16,7 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+  // const [avatarUrl, setAvatarUrl] = useState('');
 
   const { register } = useContext(UserContext);
 
@@ -27,7 +27,7 @@ function Register() {
           username,
           password,
           email,
-          avatar: avatarUrl,
+          // avatar: avatarUrl,
         }).then((res) => {
           message[res.success ? 'success' : 'error'](res.message);
         });
@@ -39,18 +39,18 @@ function Register() {
     }
   };
 
-  const handleChangeImage = (e) => {
-    const file = e.target.files[0];
-    if (file?.size >= 2097152) {
-      message.error('File too large!');
-      return;
-    }
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      setAvatarUrl(e.target.result);
-    };
-    fileReader.readAsDataURL(file);
-  };
+  // const handleChangeImage = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file?.size >= 2097152) {
+  //     message.error('File too large!');
+  //     return;
+  //   }
+  //   const fileReader = new FileReader();
+  //   fileReader.onload = (e) => {
+  //     setAvatarUrl(e.target.result);
+  //   };
+  //   fileReader.readAsDataURL(file);
+  // };
 
   return (
     <Row
@@ -98,8 +98,8 @@ function Register() {
             value={confirmPassword}
             onPressEnter={handleSubmit}
           />
-          <Input type="file" onChange={handleChangeImage} accept="image/*" />
-          <img src={avatarUrl} width="100%" />
+          {/* <Input type="file" onChange={handleChangeImage} accept="image/*" /> */}
+          {/* <img src={avatarUrl} width="100%" /> */}
           <Button onClick={handleSubmit} type="primary" block>
             Register
           </Button>
