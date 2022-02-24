@@ -3,20 +3,24 @@ import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
-import { appReducer } from "../reducers/AppReducer";
+import appReducer from "../reducers/AppReducer";
 import {
   ADD_MESSAGE,
   ADD_ROOM,
   apiConfig,
   apiUrl,
+  DELETE_MESSAGE,
+  DELETE_ROOM,
+  ioUrl,
   SET_MESSAGES,
   SET_ROOMS,
+  UPDATE_NEWEST_MESSAGE,
 } from "./constants";
 import { UserContext } from "./UserProvider";
 
-const AppContext = createContext();
+const AppContext = createContext(null);
 
-const socket = io("http://localhost:4000/", {
+const socket = io(ioUrl, {
   transports: ["websocket"],
 });
 
@@ -69,9 +73,12 @@ const AppProvider = ({ children }) => {
     }
     const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
     dispatch({ type: SET_ROOMS, payload: response.data });
-    navigate(`/rooms/${response.data[0]._id}`);
+    navigate(`/rooms/${response.data[0]?._id ?? ""}`);
   };
 
+  /**
+   * @type {(roomId: string) => void}
+   */
   const getMessage = async (roomId) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -85,6 +92,9 @@ const AppProvider = ({ children }) => {
     socket.emit("join room", { roomId });
   };
 
+  /**
+   * @type {(body: { roomId: string, content: string }) => void}
+   */
   const createMessage = async (body) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -101,8 +111,38 @@ const AppProvider = ({ children }) => {
       type: ADD_MESSAGE,
       payload: response.data,
     });
+    socket.emit("update newest message", {
+      roomId: body.roomId,
+      type: UPDATE_NEWEST_MESSAGE,
+      payload: response.data,
+    });
   };
 
+  const deleteMessage = async (body) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+    const response = await axios.delete(
+      `${apiUrl}/messages/${body.idMessage}`,
+      apiConfig()
+    );
+    socket.emit("delete message", {
+      roomId: body.roomId,
+      type: DELETE_MESSAGE,
+      payload: response.data,
+    });
+    socket.emit("update newest message", {
+      roomId: body.roomId,
+      type: UPDATE_NEWEST_MESSAGE,
+      payload: response.data,
+    });
+  };
+
+  /**
+   * @type {(body: {name: string, friendNameList: string[]}) => void}
+   *
+   */
   const createRoom = async (body) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -113,14 +153,31 @@ const AppProvider = ({ children }) => {
       body,
       apiConfig()
     );
-    dispatch({ type: ADD_ROOM, payload: response.data });
+    // dispatch({ type: ADD_ROOM, payload: response.data });
     socket.emit("create room", {
-      friendNameList: body.friendNameList,
+      friendNameList: [...body.friendNameList, user.username],
       type: ADD_ROOM,
       payload: response.data,
     });
+    navigate(`/rooms/${response.data._id}`);
+  };
+  const deleteRoom = async (idRoom) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+    const response = await axios.delete(
+      `${apiUrl}/rooms/${idRoom}`,
+      apiConfig()
+    );
+    dispatch({ type: DELETE_ROOM, payload: response.data });
+    navigate(`/rooms`);
   };
 
+  /**
+   * @type {(body: {name: string, friendNameList: string[]}) => void}
+   *
+   */
   const invite = async (body) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -137,7 +194,12 @@ const AppProvider = ({ children }) => {
       payload: response.data,
     });
   };
-  const leaveRoom = (roomId) => {
+
+  /**
+   * @type {(roomId: string) => void}
+   *
+   */
+  let leaveRoom = (roomId) => {
     socket.emit("leave room", { roomId });
   };
 
@@ -148,6 +210,8 @@ const AppProvider = ({ children }) => {
     createRoom,
     leaveRoom,
     invite,
+    deleteMessage,
+    deleteRoom,
   };
 
   return (

@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { Row, Col, Avatar, Typography, Space, Button, Tooltip } from "antd";
-import { UserOutlined, UserAddOutlined } from "@ant-design/icons";
+import {
+  Row,
+  Col,
+  Avatar,
+  Typography,
+  Space,
+  Tooltip,
+  Button,
+  message,
+} from "antd";
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import InviteFriend from "../../Modals/InviteFriend";
+import { AppContext } from "../../../contexts/AppProvider";
 
 const StyledWrapper = styled.div`
   border-bottom: 1px solid #e8e8e8;
@@ -10,25 +20,52 @@ const StyledWrapper = styled.div`
 `;
 
 function Header({ activeRoom }) {
+  const { deleteRoom } = useContext(AppContext);
+  const hanleDeleteRoom = async () => {
+    await deleteRoom(activeRoom._id);
+    message.success("leave success");
+  };
   return (
     <StyledWrapper>
       <Row>
         <Col span={12}>
           <Space size="middle">
             <Avatar icon={<UserOutlined />} size="large" />
-            <Typography.Text strong>{activeRoom.name}</Typography.Text>
+            <Typography.Text strong>{activeRoom?.name}</Typography.Text>
           </Space>
         </Col>
         <Col span={12} style={{ textAlign: "right" }}>
-          <Tooltip
-            title={
-              <Typography.Text style={{ color: "#fff" }}>
-                Invite friend
-              </Typography.Text>
-            }
-          >
-            <InviteFriend />
-          </Tooltip>
+          <Row>
+            <Col span={20}></Col>
+            <Col span={2}>
+              <Tooltip
+                title={
+                  <Typography.Text style={{ color: "#fff" }}>
+                    Invite friend
+                  </Typography.Text>
+                }
+              >
+                <InviteFriend />
+              </Tooltip>
+            </Col>
+
+            <Col span={2} style={{ textAlign: "right" }}>
+              <Tooltip
+                title={
+                  <Typography.Text style={{ color: "#fff" }}>
+                    Leave room
+                  </Typography.Text>
+                }
+              >
+                <Button
+                  type="default"
+                  shape="circle"
+                  icon={<LogoutOutlined />}
+                  onClick={hanleDeleteRoom}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </StyledWrapper>
