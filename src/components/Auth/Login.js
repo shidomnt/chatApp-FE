@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Input, Button, Tooltip, Typography, Space, message } from 'antd';
 import {
   UserOutlined,
@@ -8,14 +8,11 @@ import {
   InfoCircleOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-
-import { UserContext } from '../../contexts/UserProvider';
+import { login } from '../../contexts/auth';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const { login } = useContext(UserContext);
 
   const handleSubmit = () => {
     if (username && password) {

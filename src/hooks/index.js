@@ -1,16 +1,6 @@
-import io from 'socket.io-client'
 import { useContext } from 'react'
-import { ioUrl } from '../contexts/constants'
 import { AppContext, DispatchContext } from '../contexts/AppProvider';
 import { UserContext } from '../contexts/UserProvider';
-
-const socket = io(ioUrl, {
-  transports: ['websocket'],
-});
-
-socket.on('connect', () => {
-  console.log(`Io connected ${socket.id}`);
-});
 
 
 const useAppContext = () => {
@@ -28,14 +18,11 @@ const useAppDispatch = () => {
   return dispatch;
 }
 
-const useSocket = () => {
-  // const [socket] = useState(() => getSocket());
-  return socket;
-}
 
 export {
-  useSocket,
   useAppContext,
   useAppDispatch,
   useUserContext
-}
+};
+
+export * from './socket'

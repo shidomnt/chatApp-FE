@@ -159,10 +159,6 @@ const AppProvider = ({ children }) => {
     });
   }, [socket]);
 
-  let leaveRoom = (roomId) => {
-    socket.emit("leave room", { roomId });
-  };
-
   const appContextData = {
     state,
     getMessage,

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Input, Button, Typography, Space, message } from 'antd';
 import {
   UserOutlined,
@@ -8,8 +8,7 @@ import {
   MailOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-
-import { UserContext } from '../../contexts/UserProvider';
+import { register } from '../../contexts/auth';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -17,8 +16,6 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   // const [avatarUrl, setAvatarUrl] = useState('');
-
-  const { register } = useContext(UserContext);
 
   const handleSubmit = () => {
     if (username && password && confirmPassword) {

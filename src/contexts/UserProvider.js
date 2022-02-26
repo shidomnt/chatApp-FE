@@ -1,9 +1,8 @@
-import React, { useState, createContext, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
+import React, { useState, createContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiConfig, apiUrl } from './constants';
 import styled from 'styled-components';
 import { Spin } from 'antd';
+import { getUser, refresh, auth } from './auth'
 
 const StyledContainer = styled.div`
   margin: 20px 0;
@@ -20,106 +19,38 @@ function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const interval = useRef();
 
   useEffect(() => {
-    setIsLoading(true);
-    if (user) {
-      navigate('/', {
-        replace: true,
-      });
-    } else {
-      navigate('/login');
-    }
-    setIsLoading(false);
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      interval.current = setInterval(() => {
-        axios
-          .post(
-            `${apiUrl}/auth/refresh`,
-            {
-              token: user.refreshToken,
-            },
-            apiConfig()
-          )
-          .then((response) => {
-            if (response.data.success) {
-              localStorage.setItem('token', response.data.accessToken);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }, 1800000);
-    }
-    return () => {
-      clearInterval(interval.current);
-    };
-  }, [user]);
-
-  const getUser = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
+    auth.onAuthStateChanged((user) => {
+      setIsLoading(true);
+      if (user) {
+        setUser(user);
+        navigate('/', {
+          replace: true,
+        });
+      } else {
+        setUser(null);
         navigate('/login');
       }
-      const response = await axios.get(`${apiUrl}/auth`, apiConfig());
-      if (response.data.success) {
-        setUser(response.data.info);
-      }
-    } catch (error) {
-      setUser(null);
-      navigate('/login');
-    } finally {
       setIsLoading(false);
-    }
+    });
   }, []);
 
-  useEffect(() => getUser(), [getUser]);
+  useEffect(() => {
+    getUser();
+  }, []);
 
-  const login = async (data) => {
-    try {
-      const response = await axios.post(`${apiUrl}/auth/login`, data);
-      console.log(response.data);
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.accessToken);
-        await getUser();
-      }
-      return response.data;
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (user) {
+      refresh.start(user);
     }
-  };
-
-  const register = async (data) => {
-    try {
-      const response = await axios.post(`${apiUrl}/auth/register`, data);
-      console.log(response.data);
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.accessToken);
-        await getUser();
-      }
-      return response.data;
-    } catch (error) {
-      console.log(error);
+    return () => {
+      refresh.stop();
     }
-  };
-  const signOut = async () => {
-    try {
-      localStorage.setItem('token', '');
-      navigate('/login');
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const userContextData = { user, login, register, signOut };
+  }, [user]);
 
   return (
-    <UserContext.Provider value={userContextData}>
+    <UserContext.Provider value={{ user }}>
       {isLoading ? (
         <StyledContainer>
           <Spin />
