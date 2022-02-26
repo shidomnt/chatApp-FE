@@ -1,31 +1,52 @@
-import React, { useContext, useEffect } from 'react';
-import { Avatar, Comment, List, Skeleton, Tooltip, Typography } from 'antd';
-import moment from 'moment';
+import React, { useContext, useEffect } from "react";
+import {
+  Avatar,
+  Comment,
+  List,
+  Skeleton,
+  Tooltip,
+  Typography,
+  Button,
+  message,
+} from "antd";
+import moment from "moment";
 
-import { UserContext } from '../../../contexts/UserProvider';
-import { UserOutlined } from '@ant-design/icons';
+import { UserContext } from "../../../contexts/UserProvider";
+import { UserOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { AppContext } from "../../../contexts/AppProvider";
 
 function Message({ className, messages, loading }) {
   const { user } = useContext(UserContext);
+  const { deleteMessage } = useContext(AppContext);
 
   useEffect(() => {
     document
-      .querySelector('.' + className)
-      .scrollTo(0, document.querySelector('.' + className).scrollHeight);
+      .querySelector("." + className)
+      .scrollTo(0, document.querySelector("." + className).scrollHeight);
   }, [messages, className]);
+  const hanleDeleteMessage = async (body) => {
+    if (body.userId === user._id) {
+      await deleteMessage(body);
+      message.success("message deleted");
+    } else {
+      message.error("This message is not yours");
+    }
+  };
 
   const commentProps = (item) => ({
-    style: { textAlign: item.userId === user._id ? 'right' : '' },
+    style: { textAlign: item.userId === user._id ? "right" : "" },
     avatar:
       item.userId === user._id ? (
-        ''
+        ""
       ) : (
         <Tooltip
           placement="left"
           title={
-            <Typography.Text style={{ color: '#fff' }}>
-              {item.user?.username}
-            </Typography.Text>
+            <>
+              <Typography.Text style={{ color: "#fff" }}>
+                {item.user?.username}
+              </Typography.Text>
+            </>
           }
         >
           <Avatar
@@ -37,25 +58,44 @@ function Message({ className, messages, loading }) {
       ),
     content: (
       <Tooltip
-        placement="left"
+        placement="right"
         title={
-          <Typography.Text style={{ color: '#fff' }}>
-            {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-          </Typography.Text>
+          <Button
+            onClick={() => {
+              hanleDeleteMessage({
+                userId: item.userId,
+                idMessage: item._id,
+                roomId: item.roomId,
+              });
+            }}
+          >
+            <EllipsisOutlined />
+          </Button>
         }
       >
-        <Typography.Text
-          style={{
-            backgroundColor: '#e4e6eb',
-            padding: '4px 12px',
-            borderRadius: '20px',
-            display: 'inline-block',
-            maxWidth: '40%',
-            textAlign: 'left'
-          }}
+        <Tooltip
+          placement={item.userId === user._id ? "top" : "left"}
+          title={
+            <>
+              <Typography.Text style={{ color: "#fff" }}>
+                {moment(item.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
+              </Typography.Text>
+            </>
+          }
         >
-          {item.content}
-        </Typography.Text>
+          <Typography.Text
+            style={{
+              backgroundColor: "#e4e6eb",
+              padding: "4px 12px",
+              borderRadius: "20px",
+              display: "inline-block",
+              maxWidth: "40%",
+              textAlign: "left",
+            }}
+          >
+            {item.content}
+          </Typography.Text>
+        </Tooltip>
       </Tooltip>
     ),
   });

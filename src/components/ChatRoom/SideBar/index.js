@@ -75,7 +75,7 @@ function SideBar() {
           className="room-list"
         />
       </Space>
-    </StyledWrapper>
+    </StyledWrapper >
   );
 }
 

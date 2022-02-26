@@ -61,9 +61,9 @@ function ChatWindow() {
 
   const handleSubmit = () => {
     if (inputMessage) {
-      createMessage({ roomId, content: inputMessage }).then(() => {
-        setInputMessage('');
-      });
+      const message = inputMessage;
+      setInputMessage('');
+      createMessage({ roomId, content: message });
     }
   };
 
