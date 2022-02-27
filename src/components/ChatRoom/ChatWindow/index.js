@@ -5,7 +5,9 @@ import styled from 'styled-components';
 
 import Message from './Message';
 import Header from './Header';
-import { useAppContext, useSocket } from '../../../hooks';
+import { useAppContext, useAppDispatch } from '../../../hooks';
+import { createMessage, getMessage, leaveRoom } from '../../../contexts/action';
+import { SET_MESSAGES } from '../../../contexts/constants';
 
 const StyledWrapper = styled.div`
   & {
@@ -45,19 +47,20 @@ function ChatWindow() {
   const [inputMessage, setInputMessage] = useState('');
   const appState = useAppContext();
   const [loading, setLoading] = useState(true);
-  const socket = useSocket();
+  const dispatch = useAppDispatch();
 
-  const { getMessage, createMessage, state } = appState;
+  const { state } = appState;
 
   useEffect(() => {
     setLoading(true);
-    getMessage(roomId).then(() => {
+    getMessage(roomId).then((messages) => {
+      dispatch({ type: SET_MESSAGES, payload: messages });
       setLoading(false);
     });
     return () => {
-      socket.emit('leave room', { roomId });
+      leaveRoom(roomId);
     };
-  }, [roomId, getMessage, socket]);
+  }, [roomId]);
 
   const handleSubmit = () => {
     if (inputMessage) {

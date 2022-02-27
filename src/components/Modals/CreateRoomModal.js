@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Modal,
   Input,
@@ -11,18 +12,18 @@ import {
 import { EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 
-import { AppContext } from "../../contexts/AppProvider";
-import { UserContext } from "../../contexts/UserProvider";
 import { apiConfig, apiUrl } from "../../contexts/constants";
+import { createRoom } from "../../contexts/action"
+import { useUserContext } from '../../hooks';
 
 const CreateRoomModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [friendName, setFriendName] = useState("");
+  const navigate = useNavigate();
 
-  const { createRoom } = useContext(AppContext);
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
 
   useEffect(() => {
     if (isModalVisible) {
@@ -39,17 +40,18 @@ const CreateRoomModal = () => {
   const handleOk = async () => {
     if (roomName && friendName) {
       setIsModalVisible(false);
-      await createRoom({
+      const room = await createRoom({
         name: roomName,
         friendNameList: friendName
           .split("@")
           .map((item) => item.trim())
-          .filter((item) => item),
-      });
+          .filter((item) => item)
+      }, user);
 
       setFriendName("");
       setRoomName("");
       message.success("Create successfully!");
+      navigate(`/rooms/${room._id}`)
     } else {
       message.error("Please fill in all the field!");
     }

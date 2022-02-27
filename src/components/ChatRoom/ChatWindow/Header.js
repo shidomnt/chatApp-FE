@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import {
   Row,
@@ -12,7 +12,9 @@ import {
 } from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import InviteFriend from "../../Modals/InviteFriend";
-import { AppContext } from "../../../contexts/AppProvider";
+import { useAppDispatch } from "../../../hooks";
+import { DELETE_ROOM } from "../../../contexts/constants";
+import { deleteRoom } from "../../../contexts/action";
 
 const StyledWrapper = styled.div`
   border-bottom: 1px solid #e8e8e8;
@@ -20,9 +22,11 @@ const StyledWrapper = styled.div`
 `;
 
 function Header({ activeRoom }) {
-  const { deleteRoom } = useContext(AppContext);
+  const dispatch = useAppDispatch();
+
   const hanleDeleteRoom = async () => {
-    await deleteRoom(activeRoom._id);
+    const room = await deleteRoom(activeRoom._id);
+    dispatch({ type: DELETE_ROOM, payload: room });
     message.success("leave success");
   };
   return (

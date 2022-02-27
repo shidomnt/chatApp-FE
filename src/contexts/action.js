@@ -1,16 +1,24 @@
+import axios from 'axios';
 import {
   ADD_MESSAGE,
   ADD_ROOM,
   DELETE_MESSAGE,
-  DELETE_ROOM,
-  SET_MESSAGES,
   UPDATE_NEWEST_MESSAGE,
+  apiUrl,
+  apiConfig
 } from './constants';
+
+import { socket } from './socket';
+
+const getAllRoom = async () => {
+  const response = await axios.get(`${apiUrl}/rooms`, apiConfig());
+  return response;
+};
 
 const getMessage = async (roomId) => {
   const response = await axios.get(`${apiUrl}/messages/${roomId}`, apiConfig());
-  dispatch({ type: SET_MESSAGES, payload: response.data });
   socket.emit('join room', { roomId });
+  return response.data;
 };
 
 const createMessage = async (body) => {
@@ -19,7 +27,6 @@ const createMessage = async (body) => {
     body,
     apiConfig()
   );
-  // dispatch({ type: ADD_MESSAGE, payload: response.data });
   socket.emit('create message', {
     roomId: body.roomId,
     type: ADD_MESSAGE,
@@ -30,13 +37,10 @@ const createMessage = async (body) => {
     type: UPDATE_NEWEST_MESSAGE,
     payload: response.data,
   });
+  return response.data;
 };
 
 const deleteMessage = async (body) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    navigate('/login');
-  }
   const response = await axios.delete(
     `${apiUrl}/messages/${body.idMessage}`,
     apiConfig()
@@ -51,37 +55,29 @@ const deleteMessage = async (body) => {
     type: UPDATE_NEWEST_MESSAGE,
     payload: response.data,
   });
+  return response.data;
 };
-const createRoom = async (body) => {
+
+const createRoom = async (body, user) => {
   const response = await axios.post(
     `${apiUrl}/rooms/create`,
     body,
     apiConfig()
   );
-  // dispatch({ type: ADD_ROOM, payload: response.data });
   socket.emit('create room', {
     friendNameList: [...body.friendNameList, user.username],
     type: ADD_ROOM,
     payload: response.data,
   });
-  navigate(`/rooms/${response.data._id}`);
+  return response.data;
 };
 
 const deleteRoom = async (idRoom) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    navigate('/login');
-  }
   const response = await axios.delete(`${apiUrl}/rooms/${idRoom}`, apiConfig());
-  dispatch({ type: DELETE_ROOM, payload: response.data });
-  navigate(`/rooms`);
+  return response.data;
 };
 
 const invite = async (body) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    navigate('/login');
-  }
   const response = await axios.post(
     `${apiUrl}/rooms/invite`,
     body,
@@ -92,9 +88,20 @@ const invite = async (body) => {
     type: ADD_ROOM,
     payload: response.data,
   });
+  return response.data;
 };
 
-const leaveRoom = () => {
+const leaveRoom = (roomId) => {
   socket.emit('leave room', { roomId });
 };
 
+export {
+  getAllRoom,
+  getMessage,
+  createMessage,
+  deleteMessage,
+  createRoom,
+  deleteRoom,
+  leaveRoom,
+  invite,
+};

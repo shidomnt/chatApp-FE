@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Comment,
@@ -11,13 +11,12 @@ import {
 } from "antd";
 import moment from "moment";
 
-import { UserContext } from "../../../contexts/UserProvider";
 import { UserOutlined, EllipsisOutlined } from "@ant-design/icons";
-import { AppContext } from "../../../contexts/AppProvider";
+import { deleteMessage } from "../../../contexts/action";
+import { useUserContext } from "../../../hooks";
 
 function Message({ className, messages, loading }) {
-  const { user } = useContext(UserContext);
-  const { deleteMessage } = useContext(AppContext);
+  const { user } = useUserContext();
 
   useEffect(() => {
     document

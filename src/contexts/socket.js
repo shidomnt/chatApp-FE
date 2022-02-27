@@ -9,11 +9,6 @@ socket.on('connect', () => {
   console.log(`Io connected ${socket.id}`);
 });
 
-const useSocket = () => {
-  // const [socket] = useState(() => getSocket());
-  return socket;
-}
-
 export {
-  useSocket
-};
+  socket
+}

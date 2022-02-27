@@ -24,5 +24,3 @@ export {
   useAppDispatch,
   useUserContext
 };
-
-export * from './socket'
